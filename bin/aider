@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+DEMO_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+
+REAL_AIDER="${REAL_AIDER:-${DEMO_ROOT}/aider-venv/bin/aider}"
+if [[ ! -x "${REAL_AIDER}" ]]; then
+  REAL_AIDER="$(command -v aider || true)"
+fi
+
+if [[ -z "${REAL_AIDER}" || ! -x "${REAL_AIDER}" ]]; then
+  printf 'Could not find aider. Run ./install.sh or set REAL_AIDER=/path/to/aider.\n' >&2
+  exit 1
+fi
+
+DEFAULT_AIDER_MODEL="${DEFAULT_AIDER_MODEL:-ollama_chat/qwen3-coder:30b-48k-od}"
+
+export OLLAMA_API_BASE="${OLLAMA_API_BASE:-http://127.0.0.1:11434}"
+export AIDER_ANALYTICS="${AIDER_ANALYTICS:-false}"
+
+AIDER_STATE_DIR="${AIDER_STATE_DIR:-${DEMO_ROOT}/run/aider}"
+mkdir -p "${AIDER_STATE_DIR}"
+export AIDER_INPUT_HISTORY_FILE="${AIDER_INPUT_HISTORY_FILE:-${AIDER_STATE_DIR}/input.history}"
+export AIDER_CHAT_HISTORY_FILE="${AIDER_CHAT_HISTORY_FILE:-${AIDER_STATE_DIR}/chat.history.md}"
+export AIDER_LLM_HISTORY_FILE="${AIDER_LLM_HISTORY_FILE:-${AIDER_STATE_DIR}/llm.history.md}"
+
+case "${1:-}" in
+  --version|version|--help|-h)
+    exec "${REAL_AIDER}" "$@"
+    ;;
+esac
+
+has_model=0
+has_index_file=0
+is_one_shot=0
+for arg in "$@"; do
+  if [[ "${arg}" == "--model" || "${arg}" == --model=* ]]; then
+    has_model=1
+  fi
+  if [[ "${arg}" == "--file" || "${arg}" == --file=* || "${arg}" == "index.html" ]]; then
+    has_index_file=1
+  fi
+  if [[ "${arg}" == "--message" || "${arg}" == --message=* || "${arg}" == "--message-file" || "${arg}" == --message-file=* || "${arg}" == "-m" || "${arg}" == "-f" ]]; then
+    is_one_shot=1
+  fi
+done
+
+index_args=()
+if [[ "${is_one_shot}" == 1 && "${has_index_file}" == 0 && -f "index.html" ]]; then
+  index_args=(--file index.html)
+fi
+
+base_args=(
+  --no-git
+  --yes-always
+  --no-pretty
+  --edit-format diff
+  --no-analytics
+  --no-check-update
+  --no-show-release-notes
+  --no-restore-chat-history
+  --no-detect-urls
+  --no-suggest-shell-commands
+  --no-show-model-warnings
+)
+
+if [[ "${has_model}" == 0 ]]; then
+  exec "${REAL_AIDER}" --model "${DEFAULT_AIDER_MODEL}" "${base_args[@]}" "${index_args[@]}" "$@"
+fi
+
+exec "${REAL_AIDER}" "${base_args[@]}" "${index_args[@]}" "$@"

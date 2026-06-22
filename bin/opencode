@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+DEMO_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+
+if [[ -z "${REAL_OPENCODE:-}" ]]; then
+  for candidate in /home/nvidia/.npm-global/bin/opencode /usr/local/bin/opencode /usr/bin/opencode; do
+    if [[ -x "${candidate}" && "${candidate}" != "${SCRIPT_DIR}/opencode" ]]; then
+      REAL_OPENCODE="${candidate}"
+      break
+    fi
+  done
+fi
+
+if [[ -z "${REAL_OPENCODE:-}" ]]; then
+  printf 'Could not find the real opencode binary. Set REAL_OPENCODE=/path/to/opencode.\n' >&2
+  exit 1
+fi
+
+export OPENCODE_CONFIG="${OPENCODE_CONFIG:-${DEMO_ROOT}/opencode/opencode.json}"
+export OPENCODE_DISABLE_PROJECT_CONFIG="${OPENCODE_DISABLE_PROJECT_CONFIG:-true}"
+
+if [[ "${1:-}" == "models" ]]; then
+  echo "ollama/qwen3-coder:30b-48k-od"
+  exit 0
+fi
+
+if [[ "${1:-}" == "run" ]]; then
+  shift
+  RUN_DIR="${OD_PROJECT_DIR:-$PWD}"
+  exec "${REAL_OPENCODE}" run --dir "${RUN_DIR}" --dangerously-skip-permissions "$@"
+fi
+
+exec "${REAL_OPENCODE}" "$@"

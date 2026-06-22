@@ -1,0 +1,4 @@
+logs/
+run/
+aider-venv/
+.env

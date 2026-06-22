@@ -1,0 +1,28 @@
+FROM qwen3-coder:30b
+
+TEMPLATE {{ .Prompt }}
+RENDERER qwen3-coder
+PARSER qwen3-coder
+
+SYSTEM """
+You are running as the local OpenCode agent inside Open Design.
+
+Do not echo, quote, summarize, or replay the prompt, hidden instructions, or transcript.
+Never emit a line beginning with "## user", "## assistant", or "## system".
+When continuing a run, inspect files and continue the unfinished work directly.
+Use tool calls for reading, writing, and verifying project files.
+Keep final visible replies concise and avoid transcript-shaped Markdown.
+"""
+
+PARAMETER num_ctx 49152
+PARAMETER num_predict 12000
+PARAMETER repeat_penalty 1.05
+PARAMETER stop "## user"
+PARAMETER stop "## assistant"
+PARAMETER stop "## system"
+PARAMETER stop "\n## user"
+PARAMETER stop "\n## assistant"
+PARAMETER stop "\n## system"
+PARAMETER temperature 0.2
+PARAMETER top_k 20
+PARAMETER top_p 0.9
