@@ -28,6 +28,16 @@ The proxy logs into `http://127.0.0.1:11000` using `DGX_DASHBOARD_USER` and `DGX
 
 ## Scripted Install
 
+On a freshly imaged Spark, `install.sh` can bootstrap the runtime dependencies it needs:
+
+- Node.js 24 via NodeSource
+- base packages such as `curl`, `ca-certificates`, `gnupg`, `python3`, and `python3-venv`
+- Ollama, if it is not already installed
+- the local `qwen3-coder:30b-48k-od` Ollama alias
+- an Aider virtual environment
+
+The bootstrap path assumes an Ubuntu/Debian-like system with network access and passwordless `sudo`.
+
 From this directory:
 
 ```bash
@@ -54,11 +64,20 @@ Restart it later with:
 ./start.sh
 ```
 
+Installer toggles in `.env`:
+
+```bash
+INSTALL_MODEL=1
+INSTALL_AIDER=1
+```
+
+Set either value to `0` if you only want the packaged dashboard/proxy runtime.
+
 ## Manual Install
 
 1. Install or verify Node.js.
 
-   Node 18+ can run the dashboard proxy. Node 24 is recommended if you also run Open Design locally.
+   Node 24 is recommended and is what the installer bootstraps.
 
    ```bash
    node --version
