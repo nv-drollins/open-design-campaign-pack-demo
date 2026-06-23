@@ -1,10 +1,39 @@
-The assets are already copied into assets/nvidia/. Do not copy them again.
+If assets/nvidia/DESIGN.md does not exist, copy the NVIDIA design assets into this project first. Run this exact shell block before writing index.html:
+
+```bash
+mkdir -p assets/nvidia
+for source in \
+  "$HOME/.local/share/dgx-spark-dashboard-demo/assets/nvidia" \
+  "$PWD/../../../../dashboard/assets/nvidia" \
+  "$PWD/../../../dashboard/assets/nvidia" \
+  "/home/nvidia/open_design/dgx-spark-dashboard-demo/dashboard/assets/nvidia" \
+  "/home/nvidia/dgx-spark-dashboard-demo/dashboard/assets/nvidia" \
+  "/home/nvidia/open_design/assets/nvidia"
+do
+  if [ -f "$source/DESIGN.md" ]; then
+    cp "$source/BRAND-NOTES.md" assets/nvidia/BRAND-NOTES.md
+    cp "$source/DESIGN.md" assets/nvidia/DESIGN.md
+    cp "$source/nvidia-logo-horz.svg" assets/nvidia/nvidia-logo-horz.svg
+    cp "$source/nvidia-logo-vert.svg" assets/nvidia/nvidia-logo-vert.svg
+    break
+  fi
+done
+test -f assets/nvidia/BRAND-NOTES.md
+test -f assets/nvidia/DESIGN.md
+test -f assets/nvidia/nvidia-logo-horz.svg
+test -f assets/nvidia/nvidia-logo-vert.svg
+ls -la assets/nvidia
+```
+
+If the asset copy verification fails, stop and reply ASSET_COPY_FAILED with the current working directory and the failed command output.
+
+If the assets already exist in assets/nvidia/, do not copy them again.
 
 Create index.html now.
 
-Do not plan aloud. Do not use TodoWrite. Do not read templates. Do not search outside this project. Do not output HTML in chat.
+Allowed writes are assets/nvidia/* and index.html only. Do not plan aloud. Do not use TodoWrite. Do not read templates. Do not search outside this project. Do not output HTML in chat.
 
-First action must be writing index.html.
+After any needed asset copy, write index.html.
 
 Use the existing files:
 - assets/nvidia/DESIGN.md

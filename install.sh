@@ -111,6 +111,17 @@ ensure_opencode_cli() {
   printf 'OpenCode CLI ready: %s\n' "${real_bin}"
 }
 
+ensure_asset_link() {
+  local share_dir target
+  share_dir="${HOME}/.local/share/dgx-spark-dashboard-demo/assets"
+  target="${share_dir}/nvidia"
+
+  mkdir -p "${share_dir}"
+  ln -sfnT "${DEMO_ROOT}/dashboard/assets/nvidia" "${target}"
+
+  printf 'NVIDIA asset source ready: %s\n' "${target}"
+}
+
 ensure_ollama() {
   if ! command -v ollama >/dev/null 2>&1; then
     printf 'Installing Ollama...\n'
@@ -186,6 +197,8 @@ ensure_base_packages
 ensure_node
 
 ensure_opencode_cli
+
+ensure_asset_link
 
 if [[ "${INSTALL_MODEL:-1}" == "1" ]]; then
   printf 'Configuring Ollama Qwen3-Coder alias...\n'

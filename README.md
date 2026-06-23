@@ -33,6 +33,7 @@ On a freshly imaged Spark, `install.sh` can bootstrap the runtime dependencies i
 - Node.js 24 via NodeSource
 - base packages such as `curl`, `ca-certificates`, `gnupg`, `python3`, and `python3-venv`
 - a local OpenCode CLI install under `.tools/opencode/`
+- a stable asset source symlink at `~/.local/share/dgx-spark-dashboard-demo/assets/nvidia`
 - Ollama, if it is not already installed
 - the local `qwen3-coder:30b-48k-od` Ollama alias
 - an Aider virtual environment
@@ -190,6 +191,15 @@ Only do this on a trusted network because the proxy auto-authenticates to the Sp
 Use `prompts/create-dashboard.md` for a fresh project.
 
 If a run copies the assets but stops before writing `index.html`, use `prompts/continue-after-assets.md`.
+
+If a fresh project starts without the NVIDIA files, rerun `./install.sh` once so it recreates the stable asset source symlink, then use the updated `prompts/create-dashboard.md`. The prompt now verifies that these files exist before it writes the page:
+
+```text
+assets/nvidia/BRAND-NOTES.md
+assets/nvidia/DESIGN.md
+assets/nvidia/nvidia-logo-horz.svg
+assets/nvidia/nvidia-logo-vert.svg
+```
 
 The highest-impact lessons were:
 
