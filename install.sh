@@ -140,10 +140,6 @@ ensure_corepack() {
 }
 
 ensure_open_design() {
-  if [[ "${INSTALL_OPEN_DESIGN:-1}" != "1" ]]; then
-    return 0
-  fi
-
   ensure_corepack
 
   local repo ref open_design_dir

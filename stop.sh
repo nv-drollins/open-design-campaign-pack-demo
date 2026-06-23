@@ -11,7 +11,7 @@ if [[ -f ".env" ]]; then
   set +a
 fi
 
-if [[ "${START_OPEN_DESIGN:-1}" == "1" && -x "${DEMO_ROOT}/stop-open-design.sh" ]]; then
+if [[ -x "${DEMO_ROOT}/stop-open-design.sh" ]]; then
   "${DEMO_ROOT}/stop-open-design.sh" || true
 fi
 

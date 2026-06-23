@@ -53,7 +53,7 @@ Then open:
 http://127.0.0.1:11100/
 ```
 
-Open Design is started by `./start.sh` when `START_OPEN_DESIGN=1`:
+Open Design is started by `./start.sh` because it is required for editing and regenerating the dashboard:
 
 ```bash
 http://127.0.0.1:7457/
@@ -76,13 +76,11 @@ Installer toggles in `.env`:
 ```bash
 INSTALL_MODEL=1
 INSTALL_AIDER=1
-INSTALL_OPEN_DESIGN=1
-START_OPEN_DESIGN=1
 OD_WEB_PORT=7457
 OD_DAEMON_PORT=7456
 ```
 
-Set `INSTALL_MODEL`, `INSTALL_AIDER`, or `INSTALL_OPEN_DESIGN` to `0` to skip that install step. Set `START_OPEN_DESIGN=0` if you only want the packaged dashboard/proxy runtime.
+Set `INSTALL_MODEL` or `INSTALL_AIDER` to `0` only if those pieces are already installed. Open Design is mandatory for this demo flow.
 
 ## Manual Install
 
