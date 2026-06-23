@@ -117,7 +117,7 @@ ensure_asset_link() {
   target="${share_dir}/nvidia"
 
   mkdir -p "${share_dir}"
-  ln -sfnT "${DEMO_ROOT}/dashboard/assets/nvidia" "${target}"
+  ln -sfnT "${DEMO_ROOT}/assets/nvidia" "${target}"
 
   printf 'NVIDIA asset source ready: %s\n' "${target}"
 }

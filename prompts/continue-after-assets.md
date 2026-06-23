@@ -4,8 +4,12 @@ If assets/nvidia/DESIGN.md does not exist, copy the NVIDIA design assets into th
 mkdir -p assets/nvidia
 for source in \
   "$HOME/.local/share/dgx-spark-dashboard-demo/assets/nvidia" \
+  "$PWD/../../../../assets/nvidia" \
+  "$PWD/../../../assets/nvidia" \
   "$PWD/../../../../dashboard/assets/nvidia" \
   "$PWD/../../../dashboard/assets/nvidia" \
+  "/home/nvidia/open_design/dgx-spark-dashboard-demo/assets/nvidia" \
+  "/home/nvidia/dgx-spark-dashboard-demo/assets/nvidia" \
   "/home/nvidia/open_design/dgx-spark-dashboard-demo/dashboard/assets/nvidia" \
   "/home/nvidia/dgx-spark-dashboard-demo/dashboard/assets/nvidia" \
   "/home/nvidia/open_design/assets/nvidia"

@@ -3,7 +3,7 @@
 This package contains the working local DGX Spark dashboard demo flow:
 
 - a single-file `dashboard/index.html`
-- official local NVIDIA logo assets under `dashboard/assets/nvidia/`
+- official local NVIDIA logo assets under `assets/nvidia/` and `dashboard/assets/nvidia/`
 - a local-only Node proxy that serves the page and forwards `/api/*` to the Spark dashboard at `localhost:11000`
 - Ollama/OpenCode/Aider configuration for the local Qwen3-Coder workflow that worked reliably
 
@@ -201,6 +201,12 @@ assets/nvidia/nvidia-logo-horz.svg
 assets/nvidia/nvidia-logo-vert.svg
 ```
 
+The package also includes those same files at the repo root under `assets/nvidia/`, so you can quickly verify the install with:
+
+```bash
+ls -la assets/nvidia
+```
+
 The highest-impact lessons were:
 
 - keep OpenCode and Ollama output limits aligned at `12000`
@@ -212,6 +218,7 @@ The highest-impact lessons were:
 
 ```text
 dashboard/index.html                         Working dashboard
+assets/nvidia/                              Local brand assets and notes for new projects
 dashboard/assets/nvidia/                     Local brand assets and notes
 bin/dgx-dashboard-proxy.mjs                  Static server + DGX API proxy
 bin/opencode                                 OpenCode wrapper for Open Design
