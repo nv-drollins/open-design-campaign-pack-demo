@@ -217,10 +217,23 @@ DGX_DEMO_PORT=11101 node bin/dgx-dashboard-proxy.mjs /path/to/open-design/.od/pr
 
 Then open `http://127.0.0.1:11101/`.
 
+## Agent Workflow
+
+Use OpenCode/Qwen for full dashboard generation, asset bootstrap, API wiring, and any prompt that includes the design system or long Open Design context. OpenCode accepts the composed prompt through stdin, so it handles the larger prompts used by this demo.
+
+Use Aider only for small, targeted follow-up edits after `index.html` already exists. Keep Aider prompts short, reference `index.html` only, and avoid attaching the full design system context. The Open Design Aider adapter passes the composed prompt as a command-line argument, so very large runs can fail before Aider starts with:
+
+```text
+Aider requires the prompt as a command-line argument and this run's composed prompt exceeds the safe size
+```
+
+If that happens, rerun the edit with OpenCode or shorten the selected context before trying Aider again.
+
 The highest-impact lessons were:
 
 - keep OpenCode and Ollama output limits aligned at `12000`
 - keep Qwen3-Coder `RENDERER` and `PARSER` metadata or tool calling breaks
+- use OpenCode for large Open Design prompts; keep Aider for short one-file edits
 - tell the agent not to read templates, not to plan aloud, and to write `index.html` first
 - use the local proxy for live data instead of calling `localhost:11000` directly from the preview
 
