@@ -207,6 +207,16 @@ The package also includes those same files at the repo root under `assets/nvidia
 ls -la assets/nvidia
 ```
 
+If a generated dashboard looks good but all live stats show empty values or `Error` inside the Open Design preview, use `prompts/fix-api-preview.md`. The preview runs on Open Design's port, so the page needs fallback API routing to the dashboard proxy on port `11100`.
+
+You can also preview any generated project through the live proxy directly:
+
+```bash
+DGX_DEMO_PORT=11101 node bin/dgx-dashboard-proxy.mjs /path/to/open-design/.od/projects/<project-id>
+```
+
+Then open `http://127.0.0.1:11101/`.
+
 The highest-impact lessons were:
 
 - keep OpenCode and Ollama output limits aligned at `12000`

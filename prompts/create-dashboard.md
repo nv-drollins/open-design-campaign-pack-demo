@@ -53,11 +53,20 @@ Then use only the copied files via relative paths like assets/nvidia/nvidia-logo
 
 Use the NVIDIA logo asset exactly. Do not redraw, recolor, crop, distort, stylize, or apply effects to the logo.
 
-This page will be served through a local same-origin demo proxy. Do not call localhost:11000 directly. Use these same-origin API paths only:
-- EventSource('/api/v1/gpu_telemetry/stream')
-- fetch('/api/v1/updates/available')
-- fetch('/api/v1/update_reboot/status')
-- fetch('/api/v1/jupyterlab')
+This page may be previewed inside Open Design on port 7457 and published through the demo proxy on port 11100. Do not call localhost:11000 directly.
+
+All live Spark API calls must go through the demo proxy. Add a small JavaScript API helper with these candidates, in this order:
+- same-origin base: `''`
+- if `location.port !== '11100'`, fallback base: `http://127.0.0.1:11100`
+- if `location.port !== '11100'` and `location.hostname` is not `127.0.0.1` or `localhost`, fallback base: `${location.protocol}//${location.hostname}:11100`
+
+Use only these proxy API paths:
+- EventSource through helper path `/api/v1/gpu_telemetry/stream`
+- fetch through helper path `/api/v1/updates/available`
+- fetch through helper path `/api/v1/update_reboot/status`
+- fetch through helper path `/api/v1/jupyterlab`
+
+Never construct fetch or EventSource calls to `localhost:11000`.
 
 The GPU telemetry stream emits named events:
 - event name: gpu_telemetry
@@ -109,7 +118,8 @@ Style:
 - cards no more than 8px border radius
 
 JavaScript requirements:
-- Use EventSource with addEventListener('gpu_telemetry', ...)
+- Use fetchJson(path) or equivalent so failed same-origin preview requests can fall back to the 11100 demo proxy.
+- Use EventSource with addEventListener('gpu_telemetry', ...), and retry the telemetry stream against the next API candidate if a connection fails.
 - Update the DOM live as telemetry arrives
 - Maintain the last 30 GPU and memory samples for mini charts
 - Poll updates every 30 seconds

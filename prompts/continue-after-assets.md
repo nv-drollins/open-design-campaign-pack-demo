@@ -45,12 +45,21 @@ Use the existing files:
 - assets/nvidia/nvidia-logo-horz.svg
 - assets/nvidia/nvidia-logo-vert.svg
 
-Build the polished DGX Spark consolidated dashboard using same-origin API paths:
-- EventSource('/api/v1/gpu_telemetry/stream')
-- fetch('/api/v1/updates/available')
-- fetch('/api/v1/update_reboot/status')
-- fetch('/api/v1/jupyterlab')
+Build the polished DGX Spark consolidated dashboard so it works both in Open Design preview on port 7457 and when published through the demo proxy on port 11100.
 
-Use addEventListener('gpu_telemetry', ...) for telemetry stream events.
+Do not call localhost:11000 directly.
+
+All live Spark API calls must go through the demo proxy. Add a small JavaScript API helper with these candidates, in this order:
+- same-origin base: `''`
+- if `location.port !== '11100'`, fallback base: `http://127.0.0.1:11100`
+- if `location.port !== '11100'` and `location.hostname` is not `127.0.0.1` or `localhost`, fallback base: `${location.protocol}//${location.hostname}:11100`
+
+Use only these proxy API paths:
+- EventSource through helper path `/api/v1/gpu_telemetry/stream`
+- fetch through helper path `/api/v1/updates/available`
+- fetch through helper path `/api/v1/update_reboot/status`
+- fetch through helper path `/api/v1/jupyterlab`
+
+Use addEventListener('gpu_telemetry', ...) for telemetry stream events, and retry the telemetry stream against the next API candidate if a connection fails.
 
 After writing index.html, verify it exists, then reply DONE.
