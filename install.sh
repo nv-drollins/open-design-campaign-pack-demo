@@ -14,8 +14,20 @@ fi
 mkdir -p logs run
 chmod +x start.sh stop.sh bin/dgx-dashboard-proxy.mjs bin/opencode bin/opencode-cli bin/aider
 
-can_sudo() {
-  command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1
+is_root() {
+  [[ "${EUID}" -eq 0 ]]
+}
+
+run_root() {
+  if is_root; then
+    "$@"
+    return
+  fi
+  if ! command -v sudo >/dev/null 2>&1; then
+    printf 'sudo is required to run: %s\n' "$*" >&2
+    return 1
+  fi
+  sudo "$@"
 }
 
 apt_install() {
@@ -23,12 +35,8 @@ apt_install() {
     printf 'apt-get was not found; install these packages manually: %s\n' "$*" >&2
     return 1
   fi
-  if ! can_sudo; then
-    printf 'Passwordless sudo is required to install missing system packages: %s\n' "$*" >&2
-    return 1
-  fi
-  sudo apt-get update
-  sudo DEBIAN_FRONTEND=noninteractive apt-get install -y "$@"
+  run_root apt-get update
+  run_root env DEBIAN_FRONTEND=noninteractive apt-get install -y "$@"
 }
 
 ensure_base_packages() {
@@ -51,13 +59,8 @@ install_node_24() {
   ensure_base_packages
   tmp_script="$(mktemp)"
   curl -fsSL https://deb.nodesource.com/setup_24.x -o "${tmp_script}"
-  if can_sudo; then
-    sudo -E bash "${tmp_script}"
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
-  else
-    printf 'Passwordless sudo is required to install Node.js 24.\n' >&2
-    exit 1
-  fi
+  run_root bash "${tmp_script}"
+  run_root env DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
   rm -f "${tmp_script}"
 }
 
@@ -93,8 +96,8 @@ ensure_ollama() {
 
   if ! curl -fsS http://127.0.0.1:11434/api/version >/dev/null 2>&1; then
     printf 'Starting Ollama...\n'
-    if command -v systemctl >/dev/null 2>&1 && can_sudo && systemctl list-unit-files ollama.service >/dev/null 2>&1; then
-      sudo systemctl enable --now ollama
+    if command -v systemctl >/dev/null 2>&1 && systemctl list-unit-files ollama.service >/dev/null 2>&1; then
+      run_root systemctl enable --now ollama
       sleep 3
     fi
   fi

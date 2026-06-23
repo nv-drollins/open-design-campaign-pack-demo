@@ -36,7 +36,7 @@ On a freshly imaged Spark, `install.sh` can bootstrap the runtime dependencies i
 - the local `qwen3-coder:30b-48k-od` Ollama alias
 - an Aider virtual environment
 
-The bootstrap path assumes an Ubuntu/Debian-like system with network access and passwordless `sudo`.
+The bootstrap path assumes an Ubuntu/Debian-like system with network access and `sudo`. If packages or services need elevated privileges, the script will prompt for your password.
 
 From this directory:
 
