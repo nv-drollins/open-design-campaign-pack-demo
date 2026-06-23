@@ -12,7 +12,7 @@ if [[ -f ".env" ]]; then
 fi
 
 mkdir -p logs run
-chmod +x start.sh stop.sh bin/dgx-dashboard-proxy.mjs bin/opencode bin/opencode-cli bin/aider
+chmod +x start.sh stop.sh start-open-design.sh stop-open-design.sh bin/dgx-dashboard-proxy.mjs bin/opencode bin/opencode-cli bin/aider
 
 is_root() {
   [[ "${EUID}" -eq 0 ]]
@@ -43,6 +43,10 @@ ensure_base_packages() {
   missing=()
   command -v curl >/dev/null 2>&1 || missing+=(curl)
   command -v gpg >/dev/null 2>&1 || missing+=(gnupg)
+  command -v git >/dev/null 2>&1 || missing+=(git)
+  if ! command -v make >/dev/null 2>&1 || ! command -v g++ >/dev/null 2>&1; then
+    missing+=(build-essential)
+  fi
   if ! command -v python3 >/dev/null 2>&1; then
     missing+=(python3 python3-venv)
   elif ! python3 -m venv --help >/dev/null 2>&1; then
@@ -123,6 +127,41 @@ ensure_ollama() {
   exit 1
 }
 
+ensure_corepack() {
+  if ! command -v corepack >/dev/null 2>&1; then
+    printf 'corepack was not found after Node.js install. Check the Node.js installation.\n' >&2
+    exit 1
+  fi
+
+  if ! command -v pnpm >/dev/null 2>&1; then
+    run_root corepack enable || corepack enable
+  fi
+  corepack prepare pnpm@10.33.2 --activate
+}
+
+ensure_open_design() {
+  if [[ "${INSTALL_OPEN_DESIGN:-1}" != "1" ]]; then
+    return 0
+  fi
+
+  ensure_corepack
+
+  local repo ref open_design_dir
+  repo="${OPEN_DESIGN_REPO:-https://github.com/nexu-io/open-design.git}"
+  ref="${OPEN_DESIGN_REF:-main}"
+  open_design_dir="${OPEN_DESIGN_DIR:-${DEMO_ROOT}/open-design}"
+
+  if [[ ! -d "${open_design_dir}/.git" ]]; then
+    printf 'Cloning Open Design into %s...\n' "${open_design_dir}"
+    git clone --depth 1 --branch "${ref}" "${repo}" "${open_design_dir}"
+  else
+    printf 'Open Design checkout already exists: %s\n' "${open_design_dir}"
+  fi
+
+  printf 'Installing Open Design dependencies...\n'
+  (cd "${open_design_dir}" && corepack pnpm install)
+}
+
 ensure_base_packages
 
 ensure_node
@@ -149,6 +188,8 @@ if [[ "${INSTALL_AIDER:-1}" == "1" ]]; then
   fi
 fi
 
+ensure_open_design
+
 if [[ ! -f ".env" ]]; then
   cp .env.example .env
   printf 'Created .env from .env.example. Review credentials before exposing the proxy beyond localhost.\n'
@@ -156,5 +197,7 @@ fi
 
 printf '\nInstall complete.\n'
 printf 'Dashboard runtime: ./start.sh\n'
+printf 'Dashboard URL after start: http://%s:%s/\n' "${DGX_DEMO_HOST:-127.0.0.1}" "${DGX_DEMO_PORT:-11100}"
+printf 'Open Design URL after start: http://127.0.0.1:%s/\n' "${OD_WEB_PORT:-7457}"
 printf 'Open Design agent PATH: export PATH="%s/bin:$PATH"\n' "${DEMO_ROOT}"
 printf 'OpenCode config: export OPENCODE_CONFIG="%s/opencode/opencode.json"\n' "${DEMO_ROOT}"

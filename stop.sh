@@ -4,6 +4,17 @@ set -Eeuo pipefail
 DEMO_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 cd "${DEMO_ROOT}"
 
+if [[ -f ".env" ]]; then
+  set -a
+  # shellcheck disable=SC1091
+  source ".env"
+  set +a
+fi
+
+if [[ "${START_OPEN_DESIGN:-1}" == "1" && -x "${DEMO_ROOT}/stop-open-design.sh" ]]; then
+  "${DEMO_ROOT}/stop-open-design.sh" || true
+fi
+
 if [[ ! -f run/dgx-dashboard-demo.pid ]]; then
   printf 'No PID file found; dashboard demo does not appear to be running from this install.\n'
   exit 0

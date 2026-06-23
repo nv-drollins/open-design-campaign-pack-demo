@@ -35,6 +35,7 @@ On a freshly imaged Spark, `install.sh` can bootstrap the runtime dependencies i
 - Ollama, if it is not already installed
 - the local `qwen3-coder:30b-48k-od` Ollama alias
 - an Aider virtual environment
+- Open Design cloned into `open-design/` and installed with `pnpm`
 
 The bootstrap path assumes an Ubuntu/Debian-like system with network access and `sudo`. If packages or services need elevated privileges, the script will prompt for your password.
 
@@ -50,6 +51,12 @@ Then open:
 
 ```bash
 http://127.0.0.1:11100/
+```
+
+Open Design is started by `./start.sh` when `START_OPEN_DESIGN=1`:
+
+```bash
+http://127.0.0.1:7457/
 ```
 
 Stop it with:
@@ -69,9 +76,13 @@ Installer toggles in `.env`:
 ```bash
 INSTALL_MODEL=1
 INSTALL_AIDER=1
+INSTALL_OPEN_DESIGN=1
+START_OPEN_DESIGN=1
+OD_WEB_PORT=7457
+OD_DAEMON_PORT=7456
 ```
 
-Set either value to `0` if you only want the packaged dashboard/proxy runtime.
+Set `INSTALL_MODEL`, `INSTALL_AIDER`, or `INSTALL_OPEN_DESIGN` to `0` to skip that install step. Set `START_OPEN_DESIGN=0` if you only want the packaged dashboard/proxy runtime.
 
 ## Manual Install
 
@@ -139,18 +150,21 @@ Set either value to `0` if you only want the packaged dashboard/proxy runtime.
    ./start.sh
    ```
 
+   By default, this also starts Open Design at `http://127.0.0.1:7457/`.
+
 ## Remote Laptop Access
 
 Recommended: keep the proxy local-only and tunnel it from your laptop:
 
 ```bash
-ssh -L 11100:127.0.0.1:11100 nvidia@<spark-host>
+ssh -L 11100:127.0.0.1:11100 -L 7457:127.0.0.1:7457 nvidia@<spark-host>
 ```
 
-Then open this on the laptop:
+Then open these on the laptop:
 
 ```bash
-http://127.0.0.1:11100/
+Dashboard:   http://127.0.0.1:11100/
+Open Design: http://127.0.0.1:7457/
 ```
 
 If you intentionally bind to the LAN, edit `.env`:
@@ -188,6 +202,8 @@ opencode/opencode.json                       OpenCode local Ollama provider conf
 install.sh                                   Install/configure helper
 start.sh                                     Start/restart dashboard proxy
 stop.sh                                      Stop dashboard proxy
+start-open-design.sh                         Start Open Design tools-dev runtime
+stop-open-design.sh                          Stop Open Design tools-dev runtime
 ```
 
 ## Brand Note

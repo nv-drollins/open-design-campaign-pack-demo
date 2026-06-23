@@ -16,8 +16,14 @@ export DGX_DEMO_PORT="${DGX_DEMO_PORT:-11100}"
 export DGX_DASHBOARD_BASE="${DGX_DASHBOARD_BASE:-http://127.0.0.1:11000}"
 export DGX_DASHBOARD_USER="${DGX_DASHBOARD_USER:-nvidia}"
 export DGX_DASHBOARD_PASS="${DGX_DASHBOARD_PASS:-nvidia}"
+export START_OPEN_DESIGN="${START_OPEN_DESIGN:-1}"
+export OD_WEB_PORT="${OD_WEB_PORT:-7457}"
 
 mkdir -p logs run
+
+if [[ "${START_OPEN_DESIGN}" == "1" ]]; then
+  "${DEMO_ROOT}/start-open-design.sh"
+fi
 
 if [[ -f run/dgx-dashboard-demo.pid ]]; then
   old_pid="$(cat run/dgx-dashboard-demo.pid)"
@@ -42,7 +48,13 @@ fi
 
 printf 'DGX Spark dashboard demo is running.\n'
 printf 'Local URL: http://%s:%s/\n' "${DGX_DEMO_HOST}" "${DGX_DEMO_PORT}"
+if [[ "${START_OPEN_DESIGN}" == "1" ]]; then
+  printf 'Open Design URL: http://127.0.0.1:%s/\n' "${OD_WEB_PORT}"
+fi
 if [[ "${DGX_DEMO_HOST}" == "127.0.0.1" || "${DGX_DEMO_HOST}" == "localhost" ]]; then
   printf 'Remote laptop tip: ssh -L %s:127.0.0.1:%s nvidia@<spark-host>\n' "${DGX_DEMO_PORT}" "${DGX_DEMO_PORT}"
+  if [[ "${START_OPEN_DESIGN}" == "1" ]]; then
+    printf 'Open Design tunnel tip: ssh -L %s:127.0.0.1:%s nvidia@<spark-host>\n' "${OD_WEB_PORT}" "${OD_WEB_PORT}"
+  fi
 fi
 printf 'Log: %s/logs/dgx-dashboard-demo.log\n' "${DEMO_ROOT}"
