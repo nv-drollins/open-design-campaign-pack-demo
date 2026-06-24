@@ -46,11 +46,17 @@ export HYPERFRAMES_BROWSER_PATH=/path/to/chromium
 
 1. Create a new Open Design project.
 2. Copy the three files from `assets/` into the project folder, or ask the agent to copy them first.
-3. Use `prompts/01-create-render-ready-hyperframes-card.md` to create a render-ready HTML card with the correct HyperFrames structure from the start.
-4. Optional: use `prompts/01-create-promo-card.md` first only if you want a normal responsive web card before converting it. If you do that, follow with `prompts/02-convert-card-to-hyperframes.md`.
-5. If the studio preview is blank because the paused render timeline starts at opacity `0`, use `prompts/03-fix-preview-autoplay.md`.
-6. If render validation reports missing `data-composition-id`, missing dimensions, missing `window.__timelines`, `window.__timelines.push is not a function`, or `repeat: -1`, use `prompts/04-repair-hyperframes-contract.md`.
-7. If the MP4 renders but looks static, use `prompts/05-add-visible-motion.md`.
+3. Use `prompts/01-create-promo-card.md` to create the initial web promo card.
+4. Iterate with the creator until the web card is approved.
+5. Use `prompts/02-convert-card-to-hyperframes.md` to turn the approved card into a 6-second vertical MP4-ready HyperFrames composition.
+
+Optional shortcut: use `prompts/01-create-render-ready-hyperframes-card.md` only when you want to skip the web-card iteration step and generate a render-ready composition immediately.
+
+## Repair Prompts
+
+- If the studio preview is blank because the paused render timeline starts at opacity `0`, use `prompts/03-fix-preview-autoplay.md`.
+- If render validation reports missing `data-composition-id`, missing dimensions, missing `window.__timelines`, `window.__timelines.push is not a function`, or `repeat: -1`, use `prompts/04-repair-hyperframes-contract.md`.
+- If the MP4 renders but looks static, use `prompts/05-add-visible-motion.md`.
 
 The HyperFrames output should keep this structure:
 
