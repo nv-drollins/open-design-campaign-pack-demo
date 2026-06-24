@@ -49,6 +49,7 @@ export HYPERFRAMES_BROWSER_PATH=/path/to/chromium
 3. Use `prompts/01-create-promo-card.md` to create the initial responsive HTML card.
 4. Use `prompts/02-convert-card-to-hyperframes.md` to convert the card into a valid HyperFrames composition.
 5. If the studio preview is blank because the paused render timeline starts at opacity `0`, use `prompts/03-fix-preview-autoplay.md`.
+6. If render validation reports missing `data-composition-id`, missing dimensions, missing `window.__timelines`, `window.__timelines.push is not a function`, or `repeat: -1`, use `prompts/04-repair-hyperframes-contract.md`.
 
 The HyperFrames output should keep this structure:
 
