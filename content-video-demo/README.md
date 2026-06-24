@@ -46,8 +46,8 @@ export HYPERFRAMES_BROWSER_PATH=/path/to/chromium
 
 1. Create a new Open Design project.
 2. Copy the three files from `assets/` into the project folder, or ask the agent to copy them first.
-3. Use `prompts/01-create-promo-card.md` to create the initial responsive HTML card.
-4. Use `prompts/02-convert-card-to-hyperframes.md` to convert the card into a valid HyperFrames composition.
+3. Use `prompts/01-create-render-ready-hyperframes-card.md` to create a render-ready HTML card with the correct HyperFrames structure from the start.
+4. Optional: use `prompts/01-create-promo-card.md` first only if you want a normal responsive web card before converting it. If you do that, follow with `prompts/02-convert-card-to-hyperframes.md`.
 5. If the studio preview is blank because the paused render timeline starts at opacity `0`, use `prompts/03-fix-preview-autoplay.md`.
 6. If render validation reports missing `data-composition-id`, missing dimensions, missing `window.__timelines`, `window.__timelines.push is not a function`, or `repeat: -1`, use `prompts/04-repair-hyperframes-contract.md`.
 
