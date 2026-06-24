@@ -50,6 +50,7 @@ export HYPERFRAMES_BROWSER_PATH=/path/to/chromium
 4. Optional: use `prompts/01-create-promo-card.md` first only if you want a normal responsive web card before converting it. If you do that, follow with `prompts/02-convert-card-to-hyperframes.md`.
 5. If the studio preview is blank because the paused render timeline starts at opacity `0`, use `prompts/03-fix-preview-autoplay.md`.
 6. If render validation reports missing `data-composition-id`, missing dimensions, missing `window.__timelines`, `window.__timelines.push is not a function`, or `repeat: -1`, use `prompts/04-repair-hyperframes-contract.md`.
+7. If the MP4 renders but looks static, use `prompts/05-add-visible-motion.md`.
 
 The HyperFrames output should keep this structure:
 

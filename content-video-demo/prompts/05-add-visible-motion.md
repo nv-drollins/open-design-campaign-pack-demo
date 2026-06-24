@@ -1,44 +1,28 @@
 Edit `index.html` only.
 
-The current page failed HyperFrames render validation. Repair the HyperFrames composition contract without redesigning the card.
+The MP4 renders successfully, but it looks static. Keep the current visual design and HyperFrames structure, but make the motion clearly visible across the full 6-second render.
 
-Fix these issues exactly:
+Do not redesign the card. Do not change the episode copy. Do not output HTML in chat.
 
-1. Replace any custom `<stage ...>` element with this exact root element:
+Fix the animation script and, if needed, add harmless wrapper/classes so the animation selectors match real elements.
 
-```html
-<div id="stage" data-composition-id="teaser" data-start="0" data-width="1080" data-height="1920" data-duration="6">
-```
+Required motion:
+- cover image floats upward/downward by about 32px and subtly scales
+- glass card drifts by about 18px and rotates slightly
+- at least two background glow elements drift slowly for the full 6 seconds
+- text/CTA/tags have a short entrance animation
 
-Close it with `</div>`, not `</stage>`.
-
-2. Replace the scene wrapper with:
-
-```html
-<div class="scene clip" data-start="0" data-duration="6" data-track-index="0">
-```
-
-3. Keep all visual content inside:
-
-```html
-<div class="scene-content">...</div>
-```
-
-4. Update CSS selectors that target `stage` so they target `#stage`.
-
-5. Replace the script at the bottom with a deterministic HyperFrames-compatible GSAP registration:
+The script at the bottom must use this pattern:
 
 ```javascript
 const totalDuration = 6;
 const floatCycleDuration = 3;
 const tl = gsap.timeline({ paused: true });
 
-// 1. Entrance animation (0.5s delay to avoid jump cuts)
 tl.from(".scene-content", { duration: 1, opacity: 0, y: 50, ease: "power2.out" }, 0.5);
 tl.from("h1, .episode-title, .episode-number", { duration: 0.8, opacity: 0, scale: 0.9, ease: "back.out(1.7)" }, 1.0);
 tl.from(".description, .cta, .cta-button, .tag", { duration: 0.7, opacity: 0, y: 24, stagger: 0.08, ease: "power2.out" }, 1.25);
 
-// 2. Finite full-duration motion
 tl.to("img, .cover-art, .cover-container", {
   duration: floatCycleDuration,
   y: "-=32",
@@ -57,10 +41,25 @@ tl.to(".glass-card, .content, .card", {
   ease: "sine.inOut"
 }, 0);
 
+tl.to(".orb-cyan, .glow-cyan", {
+  duration: totalDuration,
+  x: 80,
+  y: -120,
+  scale: 1.2,
+  ease: "sine.inOut"
+}, 0);
+
+tl.to(".orb-purple, .glow-purple", {
+  duration: totalDuration,
+  x: -90,
+  y: 110,
+  scale: 1.15,
+  ease: "sine.inOut"
+}, 0);
+
 window.__timelines = window.__timelines || {};
 window.__timelines["teaser"] = tl;
 
-// PREVIEW HELPER: Auto-play and loop in the studio panel, but stay paused for headless rendering
 if (!window.location.search.includes("render")) {
   tl.play();
   tl.eventCallback("onComplete", () => tl.restart());
@@ -68,12 +67,10 @@ if (!window.location.search.includes("render")) {
 ```
 
 Important:
+- Do not use `repeat: -1`.
 - Do not initialize `window.__timelines` as an array.
 - Do not call `window.__timelines.push(...)`.
-- Do not wrap timeline registration in `DOMContentLoaded`.
-- Do not use `repeat: -1`.
-- Make sure timeline selectors match real elements in the page.
-- Do not call the composition ID `prompt-pixel-ep42`; use `teaser`.
-- Do not output HTML in chat.
+- Do not wrap the timeline registration in `DOMContentLoaded`.
+- Preserve `data-composition-id="teaser"` on the root stage.
 
 After editing, verify `index.html` exists, then reply DONE.

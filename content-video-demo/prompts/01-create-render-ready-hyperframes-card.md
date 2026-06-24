@@ -32,6 +32,22 @@ Inside the scene, put every visible element inside:
 <div class="scene-content">...</div>
 ```
 
+The visible composition must include these class names exactly so the required motion timeline always has targets:
+
+```html
+<div class="bg-orb orb-cyan"></div>
+<div class="bg-orb orb-purple"></div>
+<article class="glass-card">
+  <img src="cover.png" alt="Prompt & Pixel cover art" class="cover-art">
+  <h1 class="episode-title">...</h1>
+  <p class="description">...</p>
+  <div class="cta">...</div>
+  <div class="tag-row">
+    <span class="tag">...</span>
+  </div>
+</article>
+```
+
 Use CSS selector `#stage`, not `stage`.
 
 Do not use:
@@ -60,14 +76,41 @@ const tl = gsap.timeline({ paused: true });
 
 // 1. Entrance animation (0.5s delay to avoid jump cuts)
 tl.from(".scene-content", { duration: 1, opacity: 0, y: 50, ease: "power2.out" }, 0.5);
-tl.from("h1, .episode-title, .episode-number", { duration: 0.8, opacity: 0, scale: 0.9, ease: "back.out(1.7)" }, 1.0);
+tl.from(".episode-title", { duration: 0.8, opacity: 0, scale: 0.9, ease: "back.out(1.7)" }, 1.0);
+tl.from(".description, .cta, .tag", { duration: 0.7, opacity: 0, y: 24, stagger: 0.08, ease: "power2.out" }, 1.25);
 
-// 2. Finite mid-scene floating activity
-tl.to(".cover-art, .glass-card", {
+// 2. Finite full-duration motion, visible throughout the MP4
+tl.to(".cover-art", {
   duration: floatCycleDuration,
-  y: "-=15",
+  y: "-=32",
+  scale: 1.025,
   repeat: Math.floor(totalDuration / floatCycleDuration) - 1,
   yoyo: true,
+  ease: "sine.inOut"
+}, 0);
+
+tl.to(".glass-card", {
+  duration: floatCycleDuration,
+  y: "-=18",
+  rotate: 0.35,
+  repeat: Math.floor(totalDuration / floatCycleDuration) - 1,
+  yoyo: true,
+  ease: "sine.inOut"
+}, 0);
+
+tl.to(".orb-cyan", {
+  duration: totalDuration,
+  x: 80,
+  y: -120,
+  scale: 1.2,
+  ease: "sine.inOut"
+}, 0);
+
+tl.to(".orb-purple", {
+  duration: totalDuration,
+  x: -90,
+  y: 110,
+  scale: 1.15,
   ease: "sine.inOut"
 }, 0);
 
@@ -90,10 +133,11 @@ if (!window.location.search.includes("render")) {
 - Include the series name, episode number, episode title, short description, host/guest line if useful, CTA, and tags.
 - Keep the cover art visually dominant, but leave enough room for readable text.
 - Dark premium background with cyan/purple glow accents.
+- Include visible motion across the full 6 seconds: cover art float/scale, card drift, and background glow drift.
+- Motion must be obvious enough to notice in the MP4, not just a subtle entrance.
 - No external APIs.
 - No external product photos.
 - Vanilla HTML, CSS, and JavaScript only, except for GSAP.
 - Do not output HTML in chat.
 
 Write `index.html`, verify it exists, then reply DONE.
-
