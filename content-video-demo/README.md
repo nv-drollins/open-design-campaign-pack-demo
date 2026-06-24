@@ -26,6 +26,8 @@ From this folder:
 
 The script installs the HyperFrames skill, checks for `ffmpeg`, and checks for a Chromium browser. On Ubuntu/Debian systems it can install missing packages with `sudo`.
 
+If the script prints `PromptScript does not support global skill installation`, you can continue. The visual skill install is optional for this manual flow because `prompts/02-convert-card-to-hyperframes.md` tells Qwen to write the HyperFrames composition directly. The MP4 renderer still runs through `npx hyperframes render`.
+
 If Chromium is installed somewhere unusual, set:
 
 ```bash
@@ -81,4 +83,3 @@ If `cover.png` is missing in the project folder, copy it beside `index.html` bef
 ```bash
 cp /home/nvidia/dgx-spark-dashboard-demo/content-video-demo/assets/cover.png .
 ```
-
