@@ -140,3 +140,22 @@ if (!window.location.search.includes("render")) {
 - Do not output HTML in chat.
 
 After editing, verify `index.html` exists, then reply DONE.
+
+Before replying DONE, self-check that `index.html` contains all of these exact strings:
+
+```text
+data-composition-id="teaser"
+data-start="0"
+data-width="1080"
+data-height="1920"
+data-duration="6"
+window.__timelines["teaser"]
+```
+
+Also verify it does not contain:
+
+```text
+window.__timelines = []
+window.__timelines.push
+repeat: -1
+```

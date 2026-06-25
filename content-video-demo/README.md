@@ -86,6 +86,8 @@ The default output is `teaser.mp4` beside the `index.html` file.
 
 ## Troubleshooting
 
+If `render-teaser.sh` stops at HyperFrames preflight, apply `prompts/04-repair-hyperframes-contract.md` in the current Open Design project, then rerun the render script.
+
 If the preview is blank, the GSAP timeline is probably paused at time `0`. Apply `prompts/03-fix-preview-autoplay.md`.
 
 If rendering cannot find Chromium, set:

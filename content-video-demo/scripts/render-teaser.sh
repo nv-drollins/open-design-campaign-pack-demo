@@ -22,6 +22,55 @@ if [[ ! -f "cover.png" ]]; then
   exit 1
 fi
 
+if [[ "${SKIP_HYPERFRAMES_PREFLIGHT:-0}" != "1" ]]; then
+  preflight_failed=0
+
+  require_html() {
+    local needle="$1"
+    local message="$2"
+    if ! grep -Fq "${needle}" index.html; then
+      echo "HyperFrames preflight: ${message}" >&2
+      preflight_failed=1
+    fi
+  }
+
+  reject_html() {
+    local needle="$1"
+    local message="$2"
+    if grep -Fq "${needle}" index.html; then
+      echo "HyperFrames preflight: ${message}" >&2
+      preflight_failed=1
+    fi
+  }
+
+  require_html 'data-composition-id="teaser"' 'root is missing data-composition-id="teaser".'
+  require_html 'data-start="0"' 'root is missing data-start="0".'
+  require_html 'data-width="1080"' 'root is missing data-width="1080".'
+  require_html 'data-height="1920"' 'root is missing data-height="1920".'
+  require_html 'data-duration="6"' 'root is missing data-duration="6".'
+  require_html 'window.__timelines["teaser"]' 'timeline is not registered as window.__timelines["teaser"].'
+  reject_html 'window.__timelines = []' 'window.__timelines must be an object, not an array.'
+  reject_html 'window.__timelines.push' 'do not use window.__timelines.push(...); assign by composition id.'
+  reject_html 'repeat: -1' 'GSAP repeat:-1 is not deterministic; use a finite repeat count.'
+
+  if (( preflight_failed != 0 )); then
+    cat >&2 <<EOF
+
+index.html is not render-ready yet.
+
+Apply this Open Design prompt to the current project, then rerun this script:
+
+  ${DEMO_DIR}/prompts/04-repair-hyperframes-contract.md
+
+To bypass this local preflight anyway:
+
+  SKIP_HYPERFRAMES_PREFLIGHT=1 ${SCRIPT_DIR}/render-teaser.sh "${PROJECT_DIR}" "${OUTPUT}"
+
+EOF
+    exit 2
+  fi
+fi
+
 if [[ -z "${HYPERFRAMES_BROWSER_PATH:-}" ]]; then
   HYPERFRAMES_BROWSER_PATH="$(command -v chromium-browser 2>/dev/null || command -v chromium 2>/dev/null || command -v google-chrome 2>/dev/null || command -v google-chrome-stable 2>/dev/null || true)"
   export HYPERFRAMES_BROWSER_PATH
@@ -38,4 +87,3 @@ echo "Using browser: ${HYPERFRAMES_BROWSER_PATH}"
 npx --yes hyperframes render --output "${OUTPUT}"
 
 echo "Rendered ${PROJECT_DIR}/${OUTPUT}"
-
