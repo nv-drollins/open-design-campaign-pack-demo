@@ -25,7 +25,8 @@ window.__timelines = window.__timelines || {};
 window.__timelines["teaser"] = tl;
 
 // PREVIEW HELPER: Auto-play and loop in the studio panel, but stay paused for headless rendering
-if (!window.location.search.includes("render")) {
+const isHeadlessRender = window.location.search.includes("render") || navigator.webdriver;
+if (!isHeadlessRender) {
   tl.play();
   tl.eventCallback("onComplete", () => tl.restart());
 }
@@ -34,4 +35,3 @@ if (!window.location.search.includes("render")) {
 Do not initialize `window.__timelines` as an array. Do not use `window.__timelines.push(...)`. Do not use `repeat: -1`; use a finite repeat count instead.
 
 After editing, verify `index.html` exists and reply DONE.
-

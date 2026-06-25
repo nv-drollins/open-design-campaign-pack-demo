@@ -60,7 +60,8 @@ tl.to(".orb-purple, .glow-purple", {
 window.__timelines = window.__timelines || {};
 window.__timelines["teaser"] = tl;
 
-if (!window.location.search.includes("render")) {
+const isHeadlessRender = window.location.search.includes("render") || navigator.webdriver;
+if (!isHeadlessRender) {
   tl.play();
   tl.eventCallback("onComplete", () => tl.restart());
 }
@@ -72,5 +73,6 @@ Important:
 - Do not call `window.__timelines.push(...)`.
 - Do not wrap the timeline registration in `DOMContentLoaded`.
 - Preserve `data-composition-id="teaser"` on the root stage.
+- If you keep preview auto-play, guard it with `navigator.webdriver` so it does not run during headless render.
 
 After editing, verify `index.html` exists, then reply DONE.

@@ -57,6 +57,7 @@ Optional shortcut: use `prompts/01-create-render-ready-hyperframes-card.md` only
 - If the studio preview is blank because the paused render timeline starts at opacity `0`, use `prompts/03-fix-preview-autoplay.md`.
 - If render validation reports missing `data-composition-id`, missing dimensions, missing `window.__timelines`, `window.__timelines.push is not a function`, or `repeat: -1`, use `prompts/04-repair-hyperframes-contract.md`.
 - If the MP4 renders but looks static, use `prompts/05-add-visible-motion.md`.
+- If render gets past metadata resolution but fails during capture with `Runtime ready: false` and `data-duration: 6s`, use `prompts/06-make-timeline-render-safe.md`.
 
 The HyperFrames output should keep this structure:
 

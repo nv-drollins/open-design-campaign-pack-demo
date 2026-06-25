@@ -118,7 +118,8 @@ window.__timelines = window.__timelines || {};
 window.__timelines["teaser"] = tl;
 
 // PREVIEW HELPER: Auto-play and loop in the studio panel, but stay paused for headless rendering
-if (!window.location.search.includes("render")) {
+const isHeadlessRender = window.location.search.includes("render") || navigator.webdriver;
+if (!isHeadlessRender) {
   tl.play();
   tl.eventCallback("onComplete", () => tl.restart());
 }
