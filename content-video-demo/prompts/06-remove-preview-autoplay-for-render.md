@@ -7,11 +7,11 @@ The HyperFrames render gets past metadata/duration resolution, then fails during
 Runtime ready: false, __player: true, __hf.seek: true, GSAP timeline: true, data-duration: 6s
 ```
 
-This usually means preview-only timeline playback is interfering with HyperFrames' frame-by-frame seeking.
+For the final MP4 render, remove all preview-only GSAP playback. HyperFrames must own the playhead and seek the paused timeline frame-by-frame.
 
-Do not redesign the card. Do not change the copy, layout, assets, or timing. Only make the preview helper render-safe.
+Do not redesign the card. Do not change the copy, layout, assets, or animation timing.
 
-Find any preview helper like this:
+Remove any block like this:
 
 ```javascript
 if (!window.location.search.includes("render")) {
@@ -20,7 +20,7 @@ if (!window.location.search.includes("render")) {
 }
 ```
 
-Replace it with this guarded version:
+Also remove guarded variants like this:
 
 ```javascript
 const isHeadlessRender = window.location.search.includes("render") || navigator.webdriver;
@@ -39,5 +39,6 @@ Keep these requirements intact:
 - `window.__timelines["teaser"] = tl`
 - no `repeat: -1`
 - no `window.__timelines.push(...)`
+- no `tl.play()`
 
 After editing, verify `index.html` exists, then reply DONE.

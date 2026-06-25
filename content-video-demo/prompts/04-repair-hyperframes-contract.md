@@ -59,13 +59,6 @@ tl.to(".glass-card, .content, .card", {
 
 window.__timelines = window.__timelines || {};
 window.__timelines["teaser"] = tl;
-
-// PREVIEW HELPER: Auto-play and loop in the studio panel, but stay paused for headless rendering
-const isHeadlessRender = window.location.search.includes("render") || navigator.webdriver;
-if (!isHeadlessRender) {
-  tl.play();
-  tl.eventCallback("onComplete", () => tl.restart());
-}
 ```
 
 Important:
@@ -96,6 +89,5 @@ Also verify it does not contain:
 window.__timelines = []
 window.__timelines.push
 repeat: -1
+tl.play
 ```
-
-If `index.html` contains `tl.play()` for preview, also verify it contains `navigator.webdriver` in the render guard.

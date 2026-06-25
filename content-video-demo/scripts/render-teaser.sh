@@ -53,8 +53,8 @@ if [[ "${SKIP_HYPERFRAMES_PREFLIGHT:-0}" != "1" ]]; then
   reject_html 'window.__timelines.push' 'do not use window.__timelines.push(...); assign by composition id.'
   reject_html 'repeat: -1' 'GSAP repeat:-1 is not deterministic; use a finite repeat count.'
 
-  if grep -Fq 'tl.play' index.html && ! grep -Fq 'navigator.webdriver' index.html; then
-    echo 'HyperFrames preflight: preview auto-play must be guarded with navigator.webdriver so it stays paused during headless render.' >&2
+  if grep -Fq 'tl.play' index.html; then
+    echo 'HyperFrames preflight: remove preview auto-play before rendering. HyperFrames must own the GSAP playhead.' >&2
     preflight_failed=1
   fi
 
@@ -67,9 +67,9 @@ Apply this Open Design prompt to the current project, then rerun this script:
 
   ${DEMO_DIR}/prompts/04-repair-hyperframes-contract.md
 
-If the only failure mentions preview auto-play or navigator.webdriver, use:
+If the only failure mentions preview auto-play or tl.play, use:
 
-  ${DEMO_DIR}/prompts/06-make-timeline-render-safe.md
+  ${DEMO_DIR}/prompts/06-remove-preview-autoplay-for-render.md
 
 To bypass this local preflight anyway:
 

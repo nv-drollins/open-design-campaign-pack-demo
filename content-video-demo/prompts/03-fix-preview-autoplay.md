@@ -2,6 +2,8 @@ Edit `index.html` only.
 
 The HyperFrames preview pane is blank because the GSAP timeline is paused at `0.00s`, where the intro opacity may still be `0`.
 
+This prompt is for preview/debugging only. Before final MP4 rendering, remove preview autoplay again with `prompts/06-remove-preview-autoplay-for-render.md`.
+
 Update the script at the bottom of `index.html` so the renderer can still drive a paused timeline, but the studio/browser preview auto-plays and loops.
 
 Keep the existing timeline animations. Do not redesign the card.
