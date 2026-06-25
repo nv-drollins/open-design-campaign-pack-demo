@@ -50,6 +50,8 @@ The visible composition must include these class names exactly so the required m
 
 Use CSS selector `#stage`, not `stage`.
 
+This is a full-size video frame, not a small mobile webpage. The visible design should fill the 1080px by 1920px frame confidently. The main glass card should be roughly 780px to 900px wide, and important content should stay at least 96px away from the video edges.
+
 Do not use:
 - a custom `<stage>` tag
 - `data-id` instead of `data-composition-id`
@@ -84,8 +86,8 @@ tl.from(".description, .cta, .tag", { duration: 0.7, opacity: 0, y: 24, stagger:
 // 2. Finite full-duration motion, visible throughout the MP4
 tl.to(".cover-art", {
   duration: floatCycleDuration,
-  y: "-=32",
-  scale: 1.025,
+  y: "-=16",
+  scale: 1.012,
   repeat: Math.floor(totalDuration / floatCycleDuration) - 1,
   yoyo: true,
   ease: "sine.inOut"
@@ -93,8 +95,8 @@ tl.to(".cover-art", {
 
 tl.to(".glass-card", {
   duration: floatCycleDuration,
-  y: "-=18",
-  rotate: 0.35,
+  y: "-=8",
+  rotate: 0.15,
   repeat: Math.floor(totalDuration / floatCycleDuration) - 1,
   yoyo: true,
   ease: "sine.inOut"
@@ -102,17 +104,17 @@ tl.to(".glass-card", {
 
 tl.to(".orb-cyan", {
   duration: totalDuration,
-  x: 80,
-  y: -120,
-  scale: 1.2,
+  x: 48,
+  y: -72,
+  scale: 1.08,
   ease: "sine.inOut"
 }, 0);
 
 tl.to(".orb-purple", {
   duration: totalDuration,
-  x: -90,
-  y: 110,
-  scale: 1.15,
+  x: -54,
+  y: 66,
+  scale: 1.08,
   ease: "sine.inOut"
 }, 0);
 

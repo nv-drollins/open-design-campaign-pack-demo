@@ -66,6 +66,7 @@ if [[ "${SKIP_HYPERFRAMES_PREFLIGHT:-0}" != "1" ]]; then
   require_regex '<div[^>]*class="[^"]*scene[^"]*"[^>]*data-track-index="0"[^>]*>' 'scene wrapper is missing data-track-index="0".'
   require_html 'window.__timelines["teaser"]' 'timeline is not registered as window.__timelines["teaser"].'
   require_html '__hfDurationKeeper' 'timeline duration keeper is missing.'
+  require_html 'hf-render-guard' 'render guard CSS is missing.'
   reject_html 'window.__timelines = []' 'window.__timelines must be an object, not an array.'
   reject_html 'window.__timelines.push' 'do not use window.__timelines.push(...); assign by composition id.'
   reject_html 'repeat: -1' 'GSAP repeat:-1 is not deterministic; use a finite repeat count.'

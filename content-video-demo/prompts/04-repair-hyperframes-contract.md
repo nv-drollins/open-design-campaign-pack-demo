@@ -26,7 +26,47 @@ Close it with `</div>`, not `</stage>`.
 
 4. Update CSS selectors that target `stage` so they target `#stage`.
 
-5. Replace the script at the bottom with a deterministic HyperFrames-compatible GSAP registration:
+5. Make sure the CSS treats the composition as a full-size video frame, not a small mobile card:
+
+```css
+html,
+body {
+  margin: 0;
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  background: #05070d;
+}
+
+#stage {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  isolation: isolate;
+  transform-origin: 0 0;
+}
+
+#scene-main,
+#stage .scene,
+#stage .clip {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#stage .scene-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+```
+
+6. Replace the script at the bottom with a deterministic HyperFrames-compatible GSAP registration:
 
 ```javascript
 const totalDuration = 6;
@@ -43,8 +83,8 @@ tl.from(".description, .cta, .cta-button, .tag", { duration: 0.7, opacity: 0, y:
 // 2. Finite full-duration motion
 tl.to("img, .cover-art, .cover-container", {
   duration: floatCycleDuration,
-  y: "-=32",
-  scale: 1.025,
+  y: "-=16",
+  scale: 1.012,
   repeat: Math.floor(totalDuration / floatCycleDuration) - 1,
   yoyo: true,
   ease: "sine.inOut"
@@ -52,8 +92,8 @@ tl.to("img, .cover-art, .cover-container", {
 
 tl.to(".glass-card, .content, .card", {
   duration: floatCycleDuration,
-  y: "-=18",
-  rotate: 0.35,
+  y: "-=8",
+  rotate: 0.15,
   repeat: Math.floor(totalDuration / floatCycleDuration) - 1,
   yoyo: true,
   ease: "sine.inOut"

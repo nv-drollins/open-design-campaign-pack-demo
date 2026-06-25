@@ -49,6 +49,7 @@ export HYPERFRAMES_BROWSER_PATH=/path/to/chromium
 3. Use `prompts/01-create-promo-card.md` to create the initial web promo card.
 4. Iterate with the creator until the web card is approved.
 5. Use `prompts/02-convert-card-to-hyperframes.md` to turn the approved card into a 6-second vertical MP4-ready HyperFrames composition.
+6. Render with `scripts/render-teaser.sh`.
 
 Optional shortcut: use `prompts/01-create-render-ready-hyperframes-card.md` only when you want to skip the web-card iteration step and generate a render-ready composition immediately.
 
@@ -59,6 +60,7 @@ Optional shortcut: use `prompts/01-create-render-ready-hyperframes-card.md` only
 - If the MP4 renders but looks static, use `prompts/05-add-visible-motion.md`.
 - If render gets past metadata resolution but fails during capture with `Runtime ready: false` and `data-duration: 6s`, use `prompts/06-remove-preview-autoplay-for-render.md`.
 - If HyperFrames logs a scene like `<div class="scene" data-start="0" data-track-index="0">`, use `prompts/07-fix-scene-wrapper-duration.md`.
+- If the MP4 renders but looks too small, keeps a mobile-card layout, or the animation moves content out of frame, use `prompts/08-fix-video-size-and-framing.md`.
 
 The HyperFrames output should keep this structure:
 

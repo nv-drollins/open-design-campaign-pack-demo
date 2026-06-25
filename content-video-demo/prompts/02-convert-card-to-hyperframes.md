@@ -4,6 +4,14 @@ Edit `index.html` only.
 
 Preserve the creator-approved visual direction, copy, brand feel, glassmorphism treatment, and `cover.png` artwork. Do not redesign the card from scratch. Adapt the layout only as needed to fit a vertical 9:16 reel.
 
+This is no longer a small mobile webpage. Recompose it as a full-size 1080px by 1920px video frame:
+- the stage must be exactly 1080px wide and 1920px tall
+- the visible design should fill the frame confidently, not sit as a tiny mobile card in the middle
+- the main glass card should be roughly 780px to 900px wide
+- avoid mobile-only `max-width` values such as `360px`, `420px`, or `480px` on the main composition/card
+- keep all important text, cover art, and CTA at least 96px away from the video edges
+- use `overflow: hidden` on the stage so motion never reveals off-canvas content
+
 If `cover.png` is not in the current project folder, copy it before editing `index.html`:
 
 ```bash
@@ -43,6 +51,52 @@ Inside that scene, put all visible content inside:
 ```
 
 Use CSS selector `#stage`, not `stage`.
+
+Include this render guard CSS near the end of the `<style>` block:
+
+```css
+html,
+body {
+  margin: 0;
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  background: #05070d;
+}
+
+#stage {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  isolation: isolate;
+  transform-origin: 0 0;
+}
+
+#scene-main,
+#stage .scene,
+#stage .clip {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#stage .scene-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+#stage .glass-card {
+  box-sizing: border-box;
+  width: min(860px, calc(100% - 160px));
+  max-width: 860px;
+}
+```
 
 Do not use:
 - a custom `<stage>` tag
@@ -89,8 +143,8 @@ tl.from(".description, .cta, .cta-button, .tag", { duration: 0.7, opacity: 0, y:
 // 2. Visible full-duration motion
 tl.to(".cover-art", {
   duration: floatCycleDuration,
-  y: "-=32",
-  scale: 1.025,
+  y: "-=16",
+  scale: 1.012,
   repeat: Math.floor(totalDuration / floatCycleDuration) - 1,
   yoyo: true,
   ease: "sine.inOut"
@@ -98,8 +152,8 @@ tl.to(".cover-art", {
 
 tl.to(".glass-card", {
   duration: floatCycleDuration,
-  y: "-=18",
-  rotate: 0.35,
+  y: "-=8",
+  rotate: 0.15,
   repeat: Math.floor(totalDuration / floatCycleDuration) - 1,
   yoyo: true,
   ease: "sine.inOut"
@@ -107,17 +161,17 @@ tl.to(".glass-card", {
 
 tl.to(".orb-cyan", {
   duration: totalDuration,
-  x: 80,
-  y: -120,
-  scale: 1.2,
+  x: 48,
+  y: -72,
+  scale: 1.08,
   ease: "sine.inOut"
 }, 0);
 
 tl.to(".orb-purple", {
   duration: totalDuration,
-  x: -90,
-  y: 110,
-  scale: 1.15,
+  x: -54,
+  y: 66,
+  scale: 1.08,
   ease: "sine.inOut"
 }, 0);
 
@@ -131,6 +185,7 @@ window.__timelines["teaser"] = tl;
 - Duration: 6 seconds.
 - Keep glassmorphism crisp.
 - Motion must be visible across the full MP4: cover art float/scale, card drift, and background glow drift.
+- Motion must remain frame-safe: no important element may leave the 1080px by 1920px stage.
 - Keep all GSAP repeats finite and deterministic.
 - No external libraries except GSAP.
 - Do not output HTML in chat.

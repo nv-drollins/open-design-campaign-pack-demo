@@ -42,6 +42,61 @@ tl.to(__hfDurationKeeper, { duration: totalDuration, progress: 1, ease: "none" }
   );
 }
 
+function ensureRenderGuardCss() {
+  if (html.includes("hf-render-guard")) {
+    return;
+  }
+
+  const css = `<style id="hf-render-guard">
+html,
+body {
+  margin: 0;
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  background: #05070d;
+}
+
+#stage {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  isolation: isolate;
+  transform-origin: 0 0;
+}
+
+#scene-main,
+#stage .scene,
+#stage .clip {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#stage .scene-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+#stage .glass-card {
+  box-sizing: border-box;
+  max-width: min(900px, calc(100% - 120px));
+}
+</style>`;
+
+  if (html.includes("</head>")) {
+    replace(/<\/head>/i, `${css}\n</head>`, "added render guard CSS");
+  } else {
+    replace(/<body\b[^>]*>/i, `$&\n${css}`, "added render guard CSS");
+  }
+}
+
 replace(/<stage\b[^>]*>/i, stageOpen, "normalized custom stage tag");
 replace(/<\/stage>/gi, "</div>", "closed custom stage tag as div");
 replace(
@@ -87,6 +142,7 @@ replace(/^\s*tl\.eventCallback\([^;]*;\s*$/gm, "", "removed timeline eventCallba
 replace(/repeat\s*:\s*-1/g, "repeat: 1", "changed infinite repeat to finite repeat");
 
 ensureTimelineDurationKeeper();
+ensureRenderGuardCss();
 
 if (!html.includes('window.__timelines["teaser"]')) {
   replace(
