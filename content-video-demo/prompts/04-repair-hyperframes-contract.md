@@ -15,7 +15,7 @@ Close it with `</div>`, not `</stage>`.
 2. Replace the scene wrapper with:
 
 ```html
-<div class="scene clip" data-start="0" data-duration="6" data-track-index="0">
+<div id="scene-main" class="scene clip" data-start="0" data-duration="6" data-track-index="0">
 ```
 
 3. Keep all visual content inside:
@@ -67,6 +67,7 @@ Important:
 - Do not wrap timeline registration in `DOMContentLoaded`.
 - Do not use `repeat: -1`.
 - Make sure timeline selectors match real elements in the page.
+- Make sure the scene wrapper includes `class="scene clip"`, `data-duration="6"`, and `data-track-index="0"`.
 - Do not call the composition ID `prompt-pixel-ep42`; use `teaser`.
 - Do not output HTML in chat.
 
@@ -80,6 +81,8 @@ data-start="0"
 data-width="1080"
 data-height="1920"
 data-duration="6"
+class="scene clip"
+data-track-index="0"
 window.__timelines["teaser"]
 ```
 

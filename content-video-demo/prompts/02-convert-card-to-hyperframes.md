@@ -33,7 +33,7 @@ Use this exact root composition element:
 Inside it, use this exact scene wrapper:
 
 ```html
-<div class="scene clip" data-start="0" data-duration="6" data-track-index="0">
+<div id="scene-main" class="scene clip" data-start="0" data-duration="6" data-track-index="0">
 ```
 
 Inside that scene, put all visible content inside:
@@ -143,6 +143,8 @@ data-start="0"
 data-width="1080"
 data-height="1920"
 data-duration="6"
+class="scene clip"
+data-track-index="0"
 window.__timelines["teaser"]
 ```
 

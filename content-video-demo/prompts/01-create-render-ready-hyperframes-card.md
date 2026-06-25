@@ -23,7 +23,7 @@ Use this exact root element:
 Inside it, use this exact scene wrapper:
 
 ```html
-<div class="scene clip" data-start="0" data-duration="6" data-track-index="0">
+<div id="scene-main" class="scene clip" data-start="0" data-duration="6" data-track-index="0">
 ```
 
 Inside the scene, put every visible element inside:

@@ -58,12 +58,13 @@ Optional shortcut: use `prompts/01-create-render-ready-hyperframes-card.md` only
 - If render validation reports missing `data-composition-id`, missing dimensions, missing `window.__timelines`, `window.__timelines.push is not a function`, or `repeat: -1`, use `prompts/04-repair-hyperframes-contract.md`.
 - If the MP4 renders but looks static, use `prompts/05-add-visible-motion.md`.
 - If render gets past metadata resolution but fails during capture with `Runtime ready: false` and `data-duration: 6s`, use `prompts/06-remove-preview-autoplay-for-render.md`.
+- If HyperFrames logs a scene like `<div class="scene" data-start="0" data-track-index="0">`, use `prompts/07-fix-scene-wrapper-duration.md`.
 
 The HyperFrames output should keep this structure:
 
 ```html
 <div id="stage" data-composition-id="teaser" data-start="0" data-width="1080" data-height="1920" data-duration="6">
-  <div class="scene clip" data-start="0" data-duration="6" data-track-index="0">
+  <div id="scene-main" class="scene clip" data-start="0" data-duration="6" data-track-index="0">
     <div class="scene-content">...</div>
   </div>
 </div>

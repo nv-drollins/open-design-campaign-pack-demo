@@ -43,11 +43,23 @@ if [[ "${SKIP_HYPERFRAMES_PREFLIGHT:-0}" != "1" ]]; then
     fi
   }
 
+  require_regex() {
+    local pattern="$1"
+    local message="$2"
+    if ! grep -Eq "${pattern}" index.html; then
+      echo "HyperFrames preflight: ${message}" >&2
+      preflight_failed=1
+    fi
+  }
+
   require_html 'data-composition-id="teaser"' 'root is missing data-composition-id="teaser".'
   require_html 'data-start="0"' 'root is missing data-start="0".'
   require_html 'data-width="1080"' 'root is missing data-width="1080".'
   require_html 'data-height="1920"' 'root is missing data-height="1920".'
   require_html 'data-duration="6"' 'root is missing data-duration="6".'
+  require_regex '<div[^>]*class="[^"]*scene[^"]*clip[^"]*"[^>]*>' 'scene wrapper must include class="scene clip".'
+  require_regex '<div[^>]*class="[^"]*scene[^"]*"[^>]*data-duration="6"[^>]*>' 'scene wrapper is missing data-duration="6".'
+  require_regex '<div[^>]*class="[^"]*scene[^"]*"[^>]*data-track-index="0"[^>]*>' 'scene wrapper is missing data-track-index="0".'
   require_html 'window.__timelines["teaser"]' 'timeline is not registered as window.__timelines["teaser"].'
   reject_html 'window.__timelines = []' 'window.__timelines must be an object, not an array.'
   reject_html 'window.__timelines.push' 'do not use window.__timelines.push(...); assign by composition id.'
@@ -70,6 +82,11 @@ Apply this Open Design prompt to the current project, then rerun this script:
 If the only failure mentions preview auto-play or tl.play, use:
 
   ${DEMO_DIR}/prompts/06-remove-preview-autoplay-for-render.md
+
+If the failure mentions the scene wrapper, class="scene clip", data-duration="6",
+or data-track-index="0", use:
+
+  ${DEMO_DIR}/prompts/07-fix-scene-wrapper-duration.md
 
 To bypass this local preflight anyway:
 
