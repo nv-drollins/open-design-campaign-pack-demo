@@ -22,6 +22,10 @@ if [[ ! -f "cover.png" ]]; then
   exit 1
 fi
 
+if [[ "${NORMALIZE_HYPERFRAMES:-1}" != "0" ]]; then
+  node "${DEMO_DIR}/scripts/normalize-hyperframes.mjs" index.html
+fi
+
 if [[ "${SKIP_HYPERFRAMES_PREFLIGHT:-0}" != "1" ]]; then
   preflight_failed=0
 
@@ -61,6 +65,7 @@ if [[ "${SKIP_HYPERFRAMES_PREFLIGHT:-0}" != "1" ]]; then
   require_regex '<div[^>]*class="[^"]*scene[^"]*"[^>]*data-duration="6"[^>]*>' 'scene wrapper is missing data-duration="6".'
   require_regex '<div[^>]*class="[^"]*scene[^"]*"[^>]*data-track-index="0"[^>]*>' 'scene wrapper is missing data-track-index="0".'
   require_html 'window.__timelines["teaser"]' 'timeline is not registered as window.__timelines["teaser"].'
+  require_html '__hfDurationKeeper' 'timeline duration keeper is missing.'
   reject_html 'window.__timelines = []' 'window.__timelines must be an object, not an array.'
   reject_html 'window.__timelines.push' 'do not use window.__timelines.push(...); assign by composition id.'
   reject_html 'repeat: -1' 'GSAP repeat:-1 is not deterministic; use a finite repeat count.'

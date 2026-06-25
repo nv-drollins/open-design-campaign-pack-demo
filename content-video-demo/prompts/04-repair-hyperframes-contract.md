@@ -32,6 +32,8 @@ Close it with `</div>`, not `</stage>`.
 const totalDuration = 6;
 const floatCycleDuration = 3;
 const tl = gsap.timeline({ paused: true });
+const __hfDurationKeeper = { progress: 0 };
+tl.to(__hfDurationKeeper, { duration: totalDuration, progress: 1, ease: "none" }, 0);
 
 // 1. Entrance animation (0.5s delay to avoid jump cuts)
 tl.from(".scene-content", { duration: 1, opacity: 0, y: 50, ease: "power2.out" }, 0.5);
@@ -84,6 +86,7 @@ data-duration="6"
 class="scene clip"
 data-track-index="0"
 window.__timelines["teaser"]
+__hfDurationKeeper
 ```
 
 Also verify it does not contain:

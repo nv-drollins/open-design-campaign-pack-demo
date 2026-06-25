@@ -86,6 +86,11 @@ Or from this demo folder, pass a project path:
 
 The default output is `teaser.mp4` beside the `index.html` file.
 
+`render-teaser.sh` runs a small local normalizer before rendering. It keeps the
+creator-approved design intact, but fixes common HyperFrames contract mistakes
+such as missing scene duration, array-based timeline registration, preview
+autoplay, infinite repeats, and zero-duration GSAP timelines.
+
 ## Troubleshooting
 
 If `render-teaser.sh` stops at HyperFrames preflight, apply `prompts/04-repair-hyperframes-contract.md` in the current Open Design project, then rerun the render script.
