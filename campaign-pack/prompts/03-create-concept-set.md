@@ -10,7 +10,17 @@ campaign-c.json
 
 Do not create or edit HTML, CSS, JavaScript, SVG, renderer files, or image files.
 
-Before writing, inspect the project folder for available assets. Use local relative asset paths only. Prefer:
+Before writing, inspect the project folder for available assets. Use local relative asset paths only.
+
+If the project was prepared with `campaign-pack/scripts/prepare-project-assets.sh`, use these exact assets:
+
+- logo: `assets/nvidia-logo-horz.svg`
+- campaign-a hero: `assets/premium-workstation.svg`
+- campaign-b hero: `assets/creator-energy.svg`
+- campaign-c hero: `assets/minimal-launch.svg`
+
+If those files are not present, prefer:
+
 - a brand logo file if present
 - a product, cover, or hero image if present
 - `DESIGN.md` or brand notes if present
@@ -65,7 +75,8 @@ Rules:
 - Keep each headline under 9 words.
 - Keep each subhead under 26 words.
 - Make the three directions meaningfully different in copy, mood, and palette.
-- Use the same local logo and hero image paths across all three unless better local assets exist.
+- Use the same local logo path across all three unless a better local brand logo exists.
+- Use different local hero asset paths for the three concepts when `assets/premium-workstation.svg`, `assets/creator-energy.svg`, and `assets/minimal-launch.svg` exist.
 - Use valid JSON only.
 - Do not include markdown fences in the JSON files.
 - Do not output JSON in chat.

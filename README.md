@@ -187,8 +187,7 @@ The main `./install.sh` runs this by default when `INSTALL_CAMPAIGN_RENDERER=1`,
 Create a new Open Design project, then copy any campaign assets into that project folder. For a quick first run with existing repo assets:
 
 ```bash
-cp assets/nvidia/nvidia-logo-horz.svg open-design/.od/projects/<project-id>/
-cp content-video-demo/assets/cover.png open-design/.od/projects/<project-id>/
+./campaign-pack/scripts/prepare-project-assets.sh open-design/.od/projects/<project-id>
 ```
 
 Prompt order:
@@ -222,19 +221,55 @@ You can test the renderer without Open Design:
 node campaign-pack/scripts/render-pack.mjs campaign-pack/sample/campaign.json
 ```
 
-For a stronger ideation moment, use multi-concept review:
+For a stronger ideation moment, use the complete campaign workflow:
 
 1. Run `campaign-pack/prompts/03-create-concept-set.md` in an Open Design project.
-2. Iterate on `campaign-a.json`, `campaign-b.json`, or `campaign-c.json`.
-3. Render all concepts plus a review board:
+2. Render all concepts plus a review board:
 
    ```bash
    node campaign-pack/scripts/render-concepts.mjs open-design/.od/projects/<project-id>
    ```
 
-This writes concept folders and `exports/contact-sheet.png`.
+   This writes concept folders and `exports/contact-sheet.png`.
 
-For colorway variants after choosing a favorite concept:
+3. Pick a favorite, then run `campaign-pack/prompts/04-create-colorway-variants.md`.
+4. Tell Open Design which concept to use, for example:
+
+   ```text
+   Use campaign-a.json as the base and create the colorway variants.
+   ```
+
+5. Render the variants and review board:
+
+   ```bash
+   node campaign-pack/scripts/render-concepts.mjs open-design/.od/projects/<project-id>
+   ```
+
+   This writes variant folders such as `exports/campaign-a-green/`, `exports/campaign-a-cyan-purple/`, and `exports/campaign-a-mono/`.
+
+6. Critique the chosen direction with `campaign-pack/prompts/05-critique-campaign.md`:
+
+   ```text
+   Critique campaign-a-cyan-purple.json.
+   ```
+
+7. Apply the critique with `campaign-pack/prompts/06-apply-critique.md`:
+
+   ```text
+   Apply critique.md to campaign-a-cyan-purple.json.
+   ```
+
+8. Render the before/after board:
+
+   ```bash
+   node campaign-pack/scripts/render-before-after.mjs \
+     open-design/.od/projects/<project-id>/campaign-a-cyan-purple.json \
+     open-design/.od/projects/<project-id>/campaign-a-cyan-purple-revised.json
+   ```
+
+   This writes `exports/before-after/before-after.png`.
+
+Shorter colorway-only flow after choosing a favorite concept:
 
 1. Run `campaign-pack/prompts/04-create-colorway-variants.md`.
 2. Tell Open Design which concept to use, for example:

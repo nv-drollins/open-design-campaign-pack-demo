@@ -2,7 +2,15 @@ Create a campaign direction for a deterministic asset-pack renderer.
 
 Write `campaign.json` only. Do not create or edit HTML, CSS, JavaScript, SVG, or renderer files.
 
-Before writing, inspect the project folder for available assets. Use local relative asset paths only. Prefer:
+Before writing, inspect the project folder for available assets. Use local relative asset paths only.
+
+If the project was prepared with `campaign-pack/scripts/prepare-project-assets.sh`, use:
+
+- logo: `assets/nvidia-logo-horz.svg`
+- hero: `assets/premium-workstation.svg`
+
+If those files are not present, prefer:
+
 - a brand logo file if present
 - a product, cover, or hero image if present
 - `DESIGN.md` or brand notes if present

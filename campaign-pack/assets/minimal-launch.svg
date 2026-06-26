@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="Minimal technical launch concept visual">
+  <defs>
+    <linearGradient id="metal" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f8fbff"/>
+      <stop offset="0.5" stop-color="#8d98a6"/>
+      <stop offset="1" stop-color="#222a32"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" x2="1">
+      <stop offset="0" stop-color="#76b900"/>
+      <stop offset="1" stop-color="#e9ffbe"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="#050608"/>
+  <path d="M72 114h1056v672H72z" fill="#0b0d10" stroke="#343a42" stroke-width="2"/>
+  <g stroke="#f6f8fb" stroke-width="1" opacity="0.13">
+    <path d="M140 192h920M140 300h920M140 408h920M140 516h920M140 624h920"/>
+    <path d="M246 150v600M390 150v600M534 150v600M678 150v600M822 150v600M966 150v600"/>
+  </g>
+  <g transform="translate(266 246)">
+    <path d="M88 244h492l112 92H0z" fill="#151a20"/>
+    <path d="M146 118h394c42 0 76 34 76 76v92H70v-92c0-42 34-76 76-76z" fill="url(#metal)"/>
+    <path d="M112 198h462" stroke="#050608" stroke-width="10" opacity="0.38"/>
+    <path d="M142 286h454" stroke="url(#edge)" stroke-width="8"/>
+    <circle cx="528" cy="182" r="18" fill="#76b900"/>
+    <circle cx="472" cy="182" r="18" fill="#212a32"/>
+  </g>
+  <g fill="none" stroke="#76b900" stroke-width="3" opacity="0.88">
+    <path d="M156 172h118v118"/>
+    <path d="M1044 728H926V610"/>
+    <path d="M920 170h128v74"/>
+  </g>
+  <g fill="#d9e0e8" opacity="0.7">
+    <rect x="170" y="682" width="96" height="10"/>
+    <rect x="170" y="708" width="148" height="10"/>
+    <rect x="170" y="734" width="68" height="10"/>
+    <rect x="874" y="188" width="128" height="10"/>
+    <rect x="934" y="214" width="68" height="10"/>
+  </g>
+  <circle cx="600" cy="450" r="298" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.1"/>
+  <circle cx="600" cy="450" r="216" fill="none" stroke="#76b900" stroke-width="2" opacity="0.32"/>
+</svg>

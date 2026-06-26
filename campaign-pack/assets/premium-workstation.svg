@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="Premium workstation concept visual">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#10161f"/>
+      <stop offset="0.52" stop-color="#070b11"/>
+      <stop offset="1" stop-color="#121a13"/>
+    </linearGradient>
+    <linearGradient id="device" x1="0.1" x2="0.9" y1="0" y2="1">
+      <stop offset="0" stop-color="#e7edf5"/>
+      <stop offset="0.4" stop-color="#778391"/>
+      <stop offset="1" stop-color="#1c242c"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" x2="1">
+      <stop offset="0" stop-color="#76b900"/>
+      <stop offset="1" stop-color="#b7ff3f"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.46 0 0 0 0 0.73 0 0 0 0 0 0 0 0 0.75 0"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <g opacity="0.26" stroke="#f5f8ff" stroke-width="1">
+    <path d="M70 184h1060M70 316h1060M70 448h1060M70 580h1060M70 712h1060"/>
+    <path d="M164 98v704M308 98v704M452 98v704M596 98v704M740 98v704M884 98v704M1028 98v704"/>
+  </g>
+  <g opacity="0.55">
+    <circle cx="272" cy="254" r="108" fill="#76b900" opacity="0.15"/>
+    <circle cx="936" cy="604" r="164" fill="#4de7ff" opacity="0.12"/>
+  </g>
+  <g transform="translate(245 250)">
+    <path d="M102 405h602l58 62H48z" fill="#06090d" opacity="0.82"/>
+    <path d="M104 390h604l54 62H46z" fill="#202a33"/>
+    <path d="M166 142h444c35 0 64 29 64 64v190H102V206c0-35 29-64 64-64z" fill="url(#device)"/>
+    <path d="M150 176h476v166H150z" fill="#081019"/>
+    <path d="M170 198h436v122H170z" fill="#121d28"/>
+    <path d="M178 230h228M178 268h346M178 306h192" stroke="#76b900" stroke-width="8" stroke-linecap="round" filter="url(#glow)"/>
+    <path d="M464 220l70 48-70 48z" fill="#76b900" opacity="0.92" filter="url(#glow)"/>
+    <rect x="132" y="370" width="512" height="18" rx="9" fill="#eef3f8" opacity="0.75"/>
+  </g>
+  <g fill="#76b900" filter="url(#glow)">
+    <circle cx="178" cy="166" r="9"/>
+    <circle cx="1010" cy="194" r="7"/>
+    <circle cx="958" cy="712" r="10"/>
+    <circle cx="322" cy="746" r="6"/>
+  </g>
+  <g stroke="url(#green)" stroke-width="4" fill="none" opacity="0.82">
+    <path d="M152 710c162-114 276-124 410-48s238 62 418-64"/>
+    <path d="M192 188c86 46 150 58 238 28s172-30 270 24"/>
+  </g>
+</svg>
