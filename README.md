@@ -89,6 +89,79 @@ OD_DAEMON_PORT=7456
 
 Set `INSTALL_MODEL` or `INSTALL_AIDER` to `0` only if those pieces are already installed. Open Design is mandatory for this demo flow.
 
+## Demo
+
+After the scripted install, start the stack:
+
+```bash
+./start.sh
+```
+
+Open these pages:
+
+```text
+Dashboard:   http://127.0.0.1:11100/
+Open Design: http://127.0.0.1:7457/
+```
+
+Use OpenCode/Qwen in Open Design for the main demo prompts.
+
+### Dashboard Demo
+
+Use this flow when you want to show Open Design generating or modifying the DGX Spark dashboard.
+
+1. Create a new Open Design project.
+2. Run `prompts/create-dashboard.md`.
+3. If the run copies assets but stops before writing `index.html`, run `prompts/continue-after-assets.md`.
+4. If the generated dashboard looks good but live stats show empty values or `Error`, run `prompts/fix-api-preview.md`.
+5. Preview the generated project through the dashboard proxy if needed:
+
+   ```bash
+   DGX_DEMO_PORT=11101 node bin/dgx-dashboard-proxy.mjs open-design/.od/projects/<project-id>
+   ```
+
+   Then open `http://127.0.0.1:11101/`.
+
+### Content Creator Video Demo
+
+Use this flow when you want to show a designer creating a promo card, iterating on it, and turning the approved design into a short social teaser video.
+
+One-time renderer setup:
+
+```bash
+./content-video-demo/scripts/install-renderer-deps.sh
+```
+
+Create a new Open Design project, then copy the content-demo assets into that project folder:
+
+```bash
+cp content-video-demo/assets/DESIGN.md open-design/.od/projects/<project-id>/
+cp content-video-demo/assets/announcement.md open-design/.od/projects/<project-id>/
+cp content-video-demo/assets/cover.png open-design/.od/projects/<project-id>/
+```
+
+Prompt order:
+
+1. Run `content-video-demo/prompts/01-create-promo-card.md` to create the initial responsive web promo card.
+2. Iterate as the designer: adjust hierarchy, spacing, tone, CTA, glass effect, and cover-art placement until the card is approved.
+3. Run `content-video-demo/prompts/02-convert-card-to-hyperframes.md` to convert the approved card into a 6-second vertical HyperFrames composition.
+4. Run `content-video-demo/prompts/08-fix-video-size-and-framing.md` as the production framing pass. This makes the video fill the 1080x1920 frame and keeps motion inside the safe area.
+5. Render the MP4 from the repo root:
+
+   ```bash
+   ./content-video-demo/scripts/render-teaser.sh open-design/.od/projects/<project-id>
+   ```
+
+The output is `teaser.mp4` beside the generated `index.html` in the Open Design project folder.
+
+Optional repair prompts:
+
+- Use `content-video-demo/prompts/05-add-visible-motion.md` if the MP4 renders but looks too static.
+- Use `content-video-demo/prompts/04-repair-hyperframes-contract.md` if preflight reports missing HyperFrames attributes, bad timeline registration, or `repeat: -1`.
+- Use `content-video-demo/prompts/06-remove-preview-autoplay-for-render.md` if render preflight reports `tl.play`.
+- Use `content-video-demo/prompts/07-fix-scene-wrapper-duration.md` if HyperFrames logs a scene missing `class="scene clip"` or `data-duration="6"`.
+- Use `content-video-demo/prompts/08-fix-video-size-and-framing.md` again if the output still looks too small or motion drifts out of frame.
+
 ## Manual Install
 
 1. Install or verify Node.js.
