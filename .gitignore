@@ -1,8 +1,10 @@
 logs/
 run/
 .tools/
+campaign-pack/.tools/
 aider-venv/
 open-design/
 .env
 content-video-demo/*.mp4
 content-video-demo/output/
+campaign-pack/**/exports/

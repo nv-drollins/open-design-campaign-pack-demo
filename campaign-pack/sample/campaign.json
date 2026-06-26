@@ -1,0 +1,36 @@
+{
+  "campaignName": "Local Creative Loop",
+  "brand": {
+    "name": "DGX Spark",
+    "logo": "../../assets/nvidia/nvidia-logo-horz.svg"
+  },
+  "assets": {
+    "hero": "../../content-video-demo/assets/cover.png"
+  },
+  "theme": {
+    "background": "#05070d",
+    "surface": "rgba(14, 19, 29, 0.78)",
+    "primary": "#76B900",
+    "accent": "#4de7ff",
+    "secondary": "#b26cff",
+    "text": "#f7fbff",
+    "muted": "#9da8b7"
+  },
+  "copy": {
+    "eyebrow": "SIGGRAPH local AI demo",
+    "headline": "Create, critique, export locally",
+    "subhead": "A designer-guided workflow for exploring campaign directions on a desktop AI system without handing away the art direction.",
+    "cta": "Build the next direction",
+    "footer": "Open Design + DGX Spark"
+  },
+  "layout": {
+    "mood": "premium workstation, luminous compute, glass depth",
+    "imagePlacement": "right",
+    "density": "balanced"
+  },
+  "notes": [
+    "The creator remains the art director.",
+    "AI proposes layouts, copy, variants, and critique.",
+    "The renderer exports predictable production assets."
+  ]
+}

@@ -13,6 +13,7 @@ It focuses only on the local Ollama/OpenCode/Aider/proxy path that worked.
 
 - `dashboard/` is the DGX Spark live dashboard demo.
 - `content-video-demo/` is a Prompt & Pixel content-creator demo that generates a glassmorphism HTML promo card and renders it into a 6-second vertical MP4 with HyperFrames.
+- `campaign-pack/` is a deterministic campaign asset-pack demo: Open Design edits `campaign.json`, and a fixed local renderer exports production-size PNGs.
 
 ## What Runs
 
@@ -168,6 +169,56 @@ Optional repair prompts:
 - Use `content-video-demo/prompts/06-remove-preview-autoplay-for-render.md` if render preflight reports `tl.play`.
 - Use `content-video-demo/prompts/07-fix-scene-wrapper-duration.md` if HyperFrames logs a scene missing `class="scene clip"` or `data-duration="6"`.
 - Use `content-video-demo/prompts/08-fix-video-size-and-framing.md` again if the output still looks too small or motion drifts out of frame.
+
+### Campaign Asset Pack Demo
+
+Use this flow when you want the creator to art-direct a campaign while the final renderer stays fixed and predictable.
+
+One-time renderer setup:
+
+```bash
+./campaign-pack/scripts/install-renderer-deps.sh
+```
+
+This installs a local Playwright/Chromium screenshot renderer under `campaign-pack/.tools/`.
+
+Create a new Open Design project, then copy any campaign assets into that project folder. For a quick first run with existing repo assets:
+
+```bash
+cp assets/nvidia/nvidia-logo-horz.svg open-design/.od/projects/<project-id>/
+cp content-video-demo/assets/cover.png open-design/.od/projects/<project-id>/
+```
+
+Prompt order:
+
+1. Run `campaign-pack/prompts/01-create-campaign-json.md` to create the initial campaign direction.
+2. Iterate as the designer by asking Open Design to edit `campaign.json` only. For example:
+
+   ```text
+   Edit campaign.json only. Make the campaign feel more premium, shorten the headline, and make the CTA more direct.
+   ```
+
+3. Optional: use `campaign-pack/prompts/02-refine-campaign-json.md` as a reusable refinement prompt.
+4. Render the asset pack from the repo root:
+
+   ```bash
+   node campaign-pack/scripts/render-pack.mjs open-design/.od/projects/<project-id>/campaign.json
+   ```
+
+The renderer writes predictable PNG exports beside `campaign.json`:
+
+```text
+exports/keynote-16x9.png
+exports/vertical-poster.png
+exports/social-square.png
+exports/linkedin-banner.png
+```
+
+You can test the renderer without Open Design:
+
+```bash
+node campaign-pack/scripts/render-pack.mjs campaign-pack/sample/campaign.json
+```
 
 ## Manual Install
 
@@ -334,6 +385,7 @@ dashboard/index.html                         Working dashboard
 assets/nvidia/                              Local brand assets and notes for new projects
 dashboard/assets/nvidia/                     Local brand assets and notes
 content-video-demo/                          HTML card to MP4 teaser workflow
+campaign-pack/                               JSON to deterministic campaign PNG exports
 bin/dgx-dashboard-proxy.mjs                  Static server + DGX API proxy
 bin/opencode                                 OpenCode wrapper for Open Design
 bin/opencode-cli                             Open Design-compatible OpenCode entry
