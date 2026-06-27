@@ -239,10 +239,12 @@ For a stronger ideation moment, use the complete campaign workflow:
    Use campaign-a.json as the base and create the colorway variants.
    ```
 
-5. Render the variants and review board:
+5. Render only that selected concept's variants and review board:
 
    ```bash
-   node campaign-pack/scripts/render-concepts.mjs open-design/.od/projects/<project-id>
+   node campaign-pack/scripts/render-concepts.mjs \
+     open-design/.od/projects/<project-id> \
+     --variants-of campaign-a
    ```
 
    This writes variant folders such as `exports/campaign-a-green/`, `exports/campaign-a-cyan-purple/`, and `exports/campaign-a-mono/`.
@@ -278,10 +280,12 @@ Shorter colorway-only flow after choosing a favorite concept:
    Use campaign-a.json as the base and create the colorway variants.
    ```
 
-3. Render the variants and review board:
+3. Render only that selected concept's variants and review board:
 
    ```bash
-   node campaign-pack/scripts/render-concepts.mjs open-design/.od/projects/<project-id>
+   node campaign-pack/scripts/render-concepts.mjs \
+     open-design/.od/projects/<project-id> \
+     --variants-of campaign-a
    ```
 
 This writes variant folders such as `exports/campaign-a-green/`, `exports/campaign-a-cyan-purple/`, and `exports/campaign-a-mono/`.

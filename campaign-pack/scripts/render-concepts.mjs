@@ -9,13 +9,15 @@ const scriptDir = dirname(fileURLToPath(import.meta.url));
 const demoDir = resolve(scriptDir, "..");
 const renderPackScript = join(scriptDir, "render-pack.mjs");
 const localBrowsersPath = join(demoDir, ".tools/playwright-browsers");
-const input = resolve(process.argv[2] || ".");
+const options = parseArgs(process.argv.slice(2));
+const input = resolve(options.input || ".");
 const projectDir = existsSync(input) && statIsDir(input) ? input : dirname(input);
-const outputRoot = resolve(process.argv[3] || join(projectDir, "exports"));
-const conceptFiles = findConceptFiles(input);
+const outputRoot = resolve(options.output || join(projectDir, "exports"));
+const conceptFiles = findConceptFiles(input, options);
 
 if (conceptFiles.length === 0) {
-  throw new Error(`No campaign concept JSON files found in ${input}`);
+  const suffix = options.variantsOf ? ` for variants of ${options.variantsOf}` : "";
+  throw new Error(`No campaign concept JSON files found in ${input}${suffix}`);
 }
 
 mkdirSync(outputRoot, { recursive: true });
@@ -58,6 +60,59 @@ verifyPng(contactPng, 2400, 1600);
 console.log(`\nContact sheet: ${contactPng}`);
 console.log(`Concept export root: ${outputRoot}`);
 
+function parseArgs(args) {
+  const positional = [];
+  const parsed = {
+    input: ".",
+    output: "",
+    variantsOf: ""
+  };
+
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
+
+    if (arg === "--help" || arg === "-h") {
+      printUsage();
+      process.exit(0);
+    }
+
+    if (arg === "--variants-of") {
+      const value = args[index + 1];
+      if (!value || value.startsWith("--")) {
+        throw new Error("--variants-of requires a base concept name, such as campaign-a");
+      }
+      parsed.variantsOf = baseNameWithoutJson(value);
+      index += 1;
+      continue;
+    }
+
+    if (arg.startsWith("--variants-of=")) {
+      parsed.variantsOf = baseNameWithoutJson(arg.slice("--variants-of=".length));
+      continue;
+    }
+
+    if (arg.startsWith("--")) {
+      throw new Error(`Unknown option: ${arg}`);
+    }
+
+    positional.push(arg);
+  }
+
+  parsed.input = positional[0] || ".";
+  parsed.output = positional[1] || "";
+  return parsed;
+}
+
+function printUsage() {
+  console.log(`Usage:
+  node campaign-pack/scripts/render-concepts.mjs [project-dir-or-json] [output-dir]
+  node campaign-pack/scripts/render-concepts.mjs [project-dir] --variants-of campaign-a
+
+Examples:
+  node campaign-pack/scripts/render-concepts.mjs open-design/.od/projects/<project-id>
+  node campaign-pack/scripts/render-concepts.mjs open-design/.od/projects/<project-id> --variants-of campaign-a`);
+}
+
 function statIsDir(path) {
   try {
     return statSync(path).isDirectory();
@@ -66,7 +121,7 @@ function statIsDir(path) {
   }
 }
 
-function findConceptFiles(path) {
+function findConceptFiles(path, currentOptions) {
   if (existsSync(path) && !statIsDir(path)) {
     return [path];
   }
@@ -76,10 +131,32 @@ function findConceptFiles(path) {
     .filter((name) => /^(campaign|concept)([-_][a-z0-9]+)*\.json$/i.test(name))
     .sort();
 
+  if (currentOptions.variantsOf) {
+    const base = currentOptions.variantsOf;
+    const preferredVariants = [
+      `${base}-green.json`,
+      `${base}-cyan-purple.json`,
+      `${base}-mono.json`
+    ].filter((name) => names.includes(name));
+    const selectedVariants = preferredVariants.length > 0
+      ? preferredVariants
+      : names.filter((name) => baseNameWithoutJson(name).startsWith(`${base}-`));
+
+    return selectedVariants.map((name) => resolve(path, name));
+  }
+
   const namedConcepts = names.filter((name) => /^(campaign|concept)([-_][a-z0-9]+)+\.json$/i.test(name));
   const selected = namedConcepts.length > 0 ? namedConcepts : names;
 
   return selected.map((name) => resolve(path, name));
+}
+
+function baseNameWithoutJson(value) {
+  const name = basename(String(value).trim(), ".json");
+  if (!name) {
+    throw new Error("Expected a campaign base name.");
+  }
+  return name;
 }
 
 function text(value, fallback) {

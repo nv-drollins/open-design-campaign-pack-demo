@@ -117,10 +117,12 @@ Use this after the creator picks a favorite concept direction.
    Use campaign-a.json as the base and create the colorway variants.
    ```
 
-4. Render the variants and contact sheet:
+4. Render only that selected concept's variants and contact sheet:
 
    ```bash
-   node campaign-pack/scripts/render-concepts.mjs open-design/.od/projects/<project-id>
+   node campaign-pack/scripts/render-concepts.mjs \
+     open-design/.od/projects/<project-id> \
+     --variants-of campaign-a
    ```
 
 The prompt writes files such as:
@@ -130,6 +132,8 @@ campaign-a-green.json
 campaign-a-cyan-purple.json
 campaign-a-mono.json
 ```
+
+The `--variants-of campaign-a` flag keeps this review board focused on the selected direction's variants instead of re-rendering unrelated concepts such as `campaign-b.json` and `campaign-c.json`.
 
 ## Critique And Before/After Flow
 
