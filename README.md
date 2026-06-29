@@ -1,4 +1,4 @@
-# DGX Spark Local Dashboard Demo
+# Open-Design Campaign Pack Demo
 
 This package contains the working local DGX Spark dashboard demo flow:
 
