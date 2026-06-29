@@ -33,6 +33,54 @@ run_root() {
   sudo "$@"
 }
 
+prepend_path_dir() {
+  local dir
+  dir="$1"
+  case ":${PATH}:" in
+    *":${dir}:"*) ;;
+    *) export PATH="${dir}:${PATH}" ;;
+  esac
+  hash -r 2>/dev/null || true
+}
+
+node_major_for() {
+  local node_bin
+  node_bin="$1"
+  if [[ -x "${node_bin}" ]]; then
+    "${node_bin}" -p 'process.versions.node.split(".")[0]' 2>/dev/null || true
+  fi
+}
+
+prefer_node_24_from_standard_paths() {
+  local candidate major
+  for candidate in /usr/bin/node /usr/local/bin/node; do
+    major="$(node_major_for "${candidate}")"
+    if [[ "${major}" =~ ^[0-9]+$ ]] && (( major >= 24 )); then
+      prepend_path_dir "$(dirname "${candidate}")"
+      return 0
+    fi
+  done
+  return 1
+}
+
+current_node_major() {
+  node -p 'process.versions.node.split(".")[0]' 2>/dev/null || printf '0\n'
+}
+
+print_node_diagnostics() {
+  local candidate version
+  printf 'Node.js 24 is required. Found %s at %s after install attempt.\n' "$(node --version 2>/dev/null || printf 'not found')" "$(command -v node 2>/dev/null || printf 'not found')" >&2
+  printf 'Detected Node binaries:\n' >&2
+  for candidate in /usr/bin/node /usr/local/bin/node "$(command -v node 2>/dev/null || true)"; do
+    if [[ -n "${candidate}" && -x "${candidate}" ]]; then
+      version="$("${candidate}" --version 2>/dev/null || true)"
+      printf '  %s %s\n' "${candidate}" "${version}" >&2
+    fi
+  done
+  printf 'If /usr/bin/node is v24, run this before retrying:\n' >&2
+  printf '  export PATH="/usr/bin:$PATH"\n' >&2
+}
+
 apt_install() {
   if ! command -v apt-get >/dev/null 2>&1; then
     printf 'apt-get was not found; install these packages manually: %s\n' "$*" >&2
@@ -69,23 +117,28 @@ install_node_24() {
   run_root bash "${tmp_script}"
   run_root env DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
   rm -f "${tmp_script}"
+  hash -r 2>/dev/null || true
 }
 
 ensure_node() {
   printf 'Checking Node.js...\n'
+  prefer_node_24_from_standard_paths || true
+
   if ! command -v node >/dev/null 2>&1; then
     install_node_24
+    prefer_node_24_from_standard_paths || true
   fi
 
-  NODE_MAJOR="$(node -p 'process.versions.node.split(".")[0]')"
+  NODE_MAJOR="$(current_node_major)"
   if (( NODE_MAJOR < 24 )); then
     printf 'Found Node %s; upgrading to Node.js 24 for Open Design compatibility.\n' "$(node --version)"
     install_node_24
-    NODE_MAJOR="$(node -p 'process.versions.node.split(".")[0]')"
+    prefer_node_24_from_standard_paths || true
+    NODE_MAJOR="$(current_node_major)"
   fi
 
   if (( NODE_MAJOR < 24 )); then
-    printf 'Node.js 24 is required. Found %s after install attempt.\n' "$(node --version)" >&2
+    print_node_diagnostics
     exit 1
   fi
   printf 'Node.js ready: %s (%s)\n' "$(node --version)" "$(command -v node)"

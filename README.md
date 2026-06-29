@@ -99,6 +99,30 @@ OD_DAEMON_PORT=7456
 
 Set `INSTALL_MODEL`, `INSTALL_AIDER`, or `INSTALL_CAMPAIGN_RENDERER` to `0` only if those pieces are already installed or not needed. Open Design is mandatory for this demo flow.
 
+### Node 24 Path Note
+
+If `./install.sh` ends with:
+
+```text
+Node.js 24 is required. Found v22.x after install attempt.
+```
+
+the Spark probably has another Node binary, such as one from conda/base, earlier in `PATH` than the NodeSource install. The installer now prefers `/usr/bin/node` when it is Node 24, but you can also retry from the same shell with:
+
+```bash
+export PATH="/usr/bin:$PATH"
+hash -r
+./install.sh
+```
+
+To inspect what your shell is resolving:
+
+```bash
+command -v node
+node --version
+/usr/bin/node --version
+```
+
 ## Demo
 
 After the scripted install, start the stack:

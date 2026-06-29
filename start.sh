@@ -11,6 +11,27 @@ if [[ -f ".env" ]]; then
   set +a
 fi
 
+prefer_system_node_24() {
+  local candidate major dir
+  for candidate in /usr/bin/node /usr/local/bin/node; do
+    if [[ -x "${candidate}" ]]; then
+      major="$("${candidate}" -p 'process.versions.node.split(".")[0]' 2>/dev/null || printf '0')"
+      if [[ "${major}" =~ ^[0-9]+$ ]] && (( major >= 24 )); then
+        dir="$(dirname "${candidate}")"
+        case ":${PATH}:" in
+          *":${dir}:"*) ;;
+          *) export PATH="${dir}:${PATH}" ;;
+        esac
+        hash -r 2>/dev/null || true
+        return 0
+      fi
+    fi
+  done
+  return 1
+}
+
+prefer_system_node_24 || true
+
 export DGX_DEMO_HOST="${DGX_DEMO_HOST:-127.0.0.1}"
 export DGX_DEMO_PORT="${DGX_DEMO_PORT:-11100}"
 export DGX_DASHBOARD_BASE="${DGX_DASHBOARD_BASE:-http://127.0.0.1:11000}"
