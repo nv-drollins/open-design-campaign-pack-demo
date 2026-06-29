@@ -301,7 +301,8 @@ The highest-impact lessons were:
 
 ```text
 campaign-pack/                               Campaign JSON prompts, local assets, renderer scripts, and sample
-assets/nvidia/                               Local NVIDIA brand assets and notes
+campaign-pack/assets/                        Campaign demo assets, including the NVIDIA horizontal logo
+assets/nvidia/                               Local NVIDIA brand notes and reference files
 bin/opencode                                 OpenCode wrapper for Open Design
 bin/opencode-cli                             Open Design-compatible OpenCode entry
 bin/aider                                    Aider wrapper for local Qwen edits

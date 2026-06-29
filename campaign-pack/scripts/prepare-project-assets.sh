@@ -9,7 +9,6 @@ fi
 project_dir="$1"
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 pack_dir="$(cd "$script_dir/.." && pwd)"
-repo_dir="$(cd "$pack_dir/.." && pwd)"
 target_dir="$project_dir/assets"
 
 mkdir -p "$target_dir"
@@ -27,7 +26,7 @@ copy_asset() {
   echo "Copied assets/$name"
 }
 
-copy_asset "$repo_dir/assets/nvidia/nvidia-logo-horz.svg" "nvidia-logo-horz.svg"
+copy_asset "$pack_dir/assets/nvidia-logo-horz.svg" "nvidia-logo-horz.svg"
 copy_asset "$pack_dir/assets/premium-workstation.svg" "premium-workstation.svg"
 copy_asset "$pack_dir/assets/creator-energy.svg" "creator-energy.svg"
 copy_asset "$pack_dir/assets/minimal-launch.svg" "minimal-launch.svg"

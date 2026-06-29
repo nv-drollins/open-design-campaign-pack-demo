@@ -2,7 +2,7 @@
   "campaignName": "Local Creative Loop",
   "brand": {
     "name": "DGX Spark",
-    "logo": "../../assets/nvidia/nvidia-logo-horz.svg"
+    "logo": "../assets/nvidia-logo-horz.svg"
   },
   "assets": {
     "hero": "../../content-video-demo/assets/cover.png"
