@@ -51,8 +51,8 @@ The bootstrap path assumes an Ubuntu/Debian-like system with network access and 
 Clone the repo and enter it:
 
 ```bash
-git clone https://github.com/nv-drollins/dgx-spark-dashboard-demo.git
-cd dgx-spark-dashboard-demo
+git clone https://github.com/nv-drollins/open-design-campaign-pack-demo.git
+cd open-design-campaign-pack-demo
 ```
 
 Then run:
@@ -445,7 +445,7 @@ If that happens, rerun the edit with OpenCode, start a fresh Open Design chat wi
 
 ```bash
 cd /path/to/open-design/.od/projects/<project-id>
-/home/nvidia/dgx-spark-dashboard-demo/bin/aider --message "Edit index.html only. Make this one small layout change: ..."
+/path/to/open-design-campaign-pack-demo/bin/aider --message "Edit index.html only. Make this one small layout change: ..."
 ```
 
 The highest-impact lessons were:
