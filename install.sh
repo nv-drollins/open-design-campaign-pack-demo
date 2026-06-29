@@ -12,7 +12,7 @@ if [[ -f ".env" ]]; then
 fi
 
 mkdir -p logs run
-chmod +x start.sh stop.sh start-open-design.sh stop-open-design.sh bin/dgx-dashboard-proxy.mjs bin/opencode bin/opencode-cli bin/aider
+chmod +x start.sh stop.sh start-open-design.sh stop-open-design.sh bin/opencode bin/opencode-cli bin/aider
 if [[ -d "campaign-pack/scripts" ]]; then
   chmod +x campaign-pack/scripts/*.sh campaign-pack/scripts/*.mjs
 fi
@@ -167,17 +167,6 @@ ensure_opencode_cli() {
   printf 'OpenCode CLI ready: %s\n' "${real_bin}"
 }
 
-ensure_asset_link() {
-  local share_dir target
-  share_dir="${HOME}/.local/share/dgx-spark-dashboard-demo/assets"
-  target="${share_dir}/nvidia"
-
-  mkdir -p "${share_dir}"
-  ln -sfnT "${DEMO_ROOT}/assets/nvidia" "${target}"
-
-  printf 'NVIDIA asset source ready: %s\n' "${target}"
-}
-
 ensure_ollama() {
   if ! command -v ollama >/dev/null 2>&1; then
     printf 'Installing Ollama...\n'
@@ -264,8 +253,6 @@ ensure_node
 
 ensure_opencode_cli
 
-ensure_asset_link
-
 if [[ "${INSTALL_MODEL:-1}" == "1" ]]; then
   printf 'Configuring Ollama Qwen3-Coder alias...\n'
   ensure_ollama
@@ -296,12 +283,11 @@ ensure_open_design
 
 if [[ ! -f ".env" ]]; then
   cp .env.example .env
-  printf 'Created .env from .env.example. Review credentials before exposing the proxy beyond localhost.\n'
+  printf 'Created .env from .env.example.\n'
 fi
 
 printf '\nInstall complete.\n'
-printf 'Dashboard runtime: ./start.sh\n'
-printf 'Dashboard URL after start: http://%s:%s/\n' "${DGX_DEMO_HOST:-127.0.0.1}" "${DGX_DEMO_PORT:-11100}"
+printf 'Campaign demo runtime: ./start.sh\n'
 printf 'Open Design URL after start: http://127.0.0.1:%s/\n' "${OD_WEB_PORT:-7457}"
 printf 'Open Design agent PATH: export PATH="%s/bin:$PATH"\n' "${DEMO_ROOT}"
 printf 'OpenCode config: export OPENCODE_CONFIG="%s/opencode/opencode.json"\n' "${DEMO_ROOT}"

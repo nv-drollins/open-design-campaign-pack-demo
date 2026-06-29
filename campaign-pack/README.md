@@ -13,7 +13,7 @@ exports/linkedin-banner.png   1584x396
 
 The model never writes the renderer HTML. That keeps the live demo predictable: the creator can iterate on message, mood, hierarchy, and asset choices without breaking export formatting.
 
-The demo also supports concept sets. Open Design can create `campaign-a.json`, `campaign-b.json`, and `campaign-c.json`, then the renderer exports every pack plus a `contact-sheet.png` for creative review. A follow-up critique flow can create `critique.md`, apply the critique into a revised JSON file, and render a fixed before/after board.
+The demo also supports concept sets. Open Design can create `campaign-a.json`, `campaign-b.json`, and `campaign-c.json`, then the renderer exports every pack plus a `contact-sheet.png` for creative review. A follow-up critique flow can create `critique.md`, snapshot the selected campaign, apply critique in place, and render a fixed before/after board.
 
 ## One-Time Setup
 
@@ -188,7 +188,7 @@ exports/before-after/before-after.png
 - `prompts/03-create-concept-set.md` creates three distinct campaign directions.
 - `prompts/04-create-colorway-variants.md` creates green, cyan/purple, and monochrome variants from an approved concept.
 - `prompts/05-critique-campaign.md` writes a creative-director critique report.
-- `prompts/06-apply-critique.md` applies that critique into a revised campaign JSON.
+- `prompts/06-apply-critique.md` applies that critique to the selected campaign JSON.
 
 ## Script Files
 
